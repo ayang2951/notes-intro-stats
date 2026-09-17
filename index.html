@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STAT1201 Recitation Notes</title>
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Set the saved theme before painting the page. New visitors start in light mode. -->
+  <script>
+    (() => {
+      const pagePath = window.location.pathname.replace(/\/index\.html$/, '/');
+      window.COURSE_NOTES_STORAGE_PREFIX = `course-notes:${pagePath}:`;
+
+      let theme = 'light';
+      try {
+        const savedTheme = localStorage.getItem(`${window.COURSE_NOTES_STORAGE_PREFIX}theme`);
+        if (savedTheme === 'dark') theme = 'dark';
+      } catch (error) {
+        // Storage can be unavailable in privacy-restricted browsing contexts.
+      }
+
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Exact versions keep GitHub Pages output reproducible. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/marked@18.0.11/lib/marked.umd.js"></script>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'none'
+      },
+      options: { ignoreHtmlClass: 'tex2jax_ignore' },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+
+  <script defer src="equation-numbering.js"></script>
+  <script defer src="code-blocks.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-head-inner">
+      <div class="title-block">
+        <h1>STAT1201 Recitation Notes</h1>
+        <p class="subtitle">These are the STAT1201 course recitation notes.</p>
+      </div>
+      <div class="controls">
+        <button id="themeToggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">☀️</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app">
+    <nav id="toc" aria-label="Table of contents"></nav>
+    <article id="content" aria-live="polite">
+      <noscript>Please enable JavaScript to see the compiled notes.</noscript>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <small>. &nbsp;§&nbsp; . &nbsp; Audrey Yang &nbsp; . &nbsp;§&nbsp; .</small>
+  </footer>
+
+  <button id="toggleBookmarks" type="button" title="Show bookmarks" aria-label="Show bookmarks" aria-controls="bookmarkPanel" aria-expanded="false">📚</button>
+  <aside id="bookmarkPanel" aria-labelledby="bookmarkPanelTitle" hidden>
+    <h2 id="bookmarkPanelTitle">Bookmarked Content</h2>
+    <ul id="bookmarkList"></ul>
+  </aside>
+</body>
+</html>
