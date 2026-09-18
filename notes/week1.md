@@ -169,7 +169,7 @@ hist(PTSD)
 
 This produces the following plot.
 
-<img src="figures/ptsd-healthy-histograms.png" alt="PTSD vs. Healthy Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
+<img src="figures/w1-ptsd-healthy-histograms.png" alt="PTSD vs. Healthy Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
 
 We can also plot boxplots for both datasets by running
@@ -181,7 +181,7 @@ boxplot(PTSD, Healthy, names = c("PTSD", "Healthy"), horizontal = TRUE)
 
 This produces the following plot.
 
-<img src="figures/ptsd-healthy-boxplot.png" alt="PTSD vs. Healthy Boxplots" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
+<img src="figures/w1-ptsd-healthy-boxplot.png" alt="PTSD vs. Healthy Boxplots" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
 ### Loading Data from a CSV
 
@@ -222,7 +222,13 @@ hist(
 
 ```
 
-<img src="figures/salary-histogram.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
+<img src="figures/w1-salary-histogram.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
+
+## What Do We Expect Data to Look Like?
+
+Consider two sequences of coin tosses. Which is real?
+
+<img src="figures/w1-coin-tosses.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
 
 
