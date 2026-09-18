@@ -230,7 +230,18 @@ Consider two sequences of coin tosses. Which is real?
 
 <img src="figures/w1-coin-tosses.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
+<details class="collapsible">
+<summary>Proof</summary>
+<div class="collapsible__content">
 
+The in-class demonstration we did was more fun. But the same applies here: the first sequence has long strings of $0$s, while the second one does not. 
+
+We can use the longest sequence of $0$s or $1$s, as well as the number of changes between $0$s and $1$s, to guess.
+
+What we learn is that humans are very biased in terms of how we think data *should* look. Rarely does reality match our intuition.
+
+</div>
+</details>
 
 
 <!--
