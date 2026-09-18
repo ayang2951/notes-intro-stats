@@ -44,7 +44,7 @@ In this case, the average is nine.
 
 After you learn what the average grade was on the exam, what's your next move? You'll ask how far you were from the average, either above or below.
 
-Everyone can compute their own deviation from the mean. Summing all these differences always gives us zero: intuitively, on average, everyone is zero distance away from the average.
+Everyone can compute their own deviation from the mean. Summing all these differences always gives us zero: intuitively, the average distance from the average is zero.
 
 The next object is slightly mysterious: the squared deviation from the mean. Why should we square that value? If we want to examine how spread out the data is, using only the raw difference values is unhelpful: they always sum to zero. To truly understand how much people "deviate" from the mean, we need to account for people who are above *and* below the average: an easy way of making those values all nonnegative is to square them.
 
