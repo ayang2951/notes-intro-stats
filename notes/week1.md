@@ -1,7 +1,5 @@
 <div class="solution-visibility" data-show-solutions="false"></div>
 
-_Disclaimer: The contents of this page are not endorsed by the course instructors, and none of the teaching staff should be held responsible for mistakes._
-
 ## Basic Introductions
 
 There are three TAs for this course, and each of us is responsible for one recitation section. Attendance is optional, but highly encouraged, and if you have scheduling conflicts, you may attend any of the three recitations. The advent of ChatGPT has made students a lot more careless in truly learning the material&mdash;but you won't have access to technology during your exam... or at least we'll try our best to make sure you don't.
@@ -17,7 +15,9 @@ We live in a world of data: information of all kinds is stored in all sorts of f
 When we work with data, what can it tell us? What assumptions do we need to make about the data to make it "useful"? How do we use data to communicate with others or better understand the world? What are we interested in as statisticians?
 
 <ol type="i">
-  <li>Estimation: if we have data, can we better understand qualities of an entity currently mysterious to us?</li>
+  <li>Estimation: if we have data, can we better understand qualities of an entity or group currently mysterious to us?
+  
+  A simple might be to </li>
   <li>Prediction: if we have data on a subject, can we predict how something will play out?</li>
   <li>Inference: if we have data, can we make convincing statements about the world?</li>
 </ol>
@@ -231,10 +231,10 @@ Consider two sequences of coin tosses. Which is real?
 <img src="figures/w1-coin-tosses.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
 <details class="collapsible">
-<summary>Proof</summary>
+<summary>Answer</summary>
 <div class="collapsible__content">
 
-The in-class demonstration we did was more fun. But the same applies here: the first sequence has long strings of $0$s, while the second one does not. 
+The in-class live demonstration we did was more fun. But the same logic applies here: the first sequence has long strings of $0$s, while the second one does not. 
 
 We can use the longest sequence of $0$s or $1$s, as well as the number of changes between $0$s and $1$s, to guess.
 
