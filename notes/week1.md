@@ -92,13 +92,13 @@ We now display the table of calculated values.
 
 ### Sample vs. Population
 
-For an entire population of $N$ individuals, the population mean and variance are
+For an entire population of $N$ individuals $\{X_1, X_2 \ldots X_N\}$, the population mean and variance are
 
 $$
 \mu := \frac{1}{N} \sum_{i = 1}^N X_i, \qquad \sigma^2 := \frac{1}{N} \sum_{i = 1}^N (X_i - \mu)^2.
 $$
 
-If we have a sample of size $n$, the sample mean and variance are
+If we have a sample $\{x_1, x_2 \ldots x_n\}$ of size $n$, the sample mean and variance are
 
 $$
 \bar x := \frac{1}{n} \sum_{i = 1}^n x_i, \qquad s^2 := \frac{1}{n - 1} \sum_{i = 1}^n (x_i - \bar x)^2.
@@ -157,6 +157,10 @@ print(quantile(Healthy))
 
 ```
 
+This produces the following output.
+
+<img src="figures/w1-quantiles.png" alt="PTSD vs. Healthy Quantiles" style="display:block; width:40%; max-width:600px; height:auto; margin:1rem auto;">
+
 ### Plotting
 
 We can also use the software to plot figures. Using the same data as defined in your `R` environment above, to plot histograms of the two datasets, we can run
@@ -169,7 +173,7 @@ hist(PTSD)
 
 This produces the following plot.
 
-<img src="figures/w1-ptsd-healthy-histograms.png" alt="PTSD vs. Healthy Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
+<img src="figures/w1-ptsd-healthy-histograms.png" alt="PTSD vs. Healthy Histograms" style="display:block; width:90%; max-width:1000px; height:auto; margin:1rem auto;">
 
 
 We can also plot boxplots for both datasets by running
