@@ -1,6 +1,7 @@
 "use strict";
 
 const ORDERED_NOTES = [
+  { file: "week2.md", title: "Week 2: Sets & Probabilities" },
   { file: "week1.md", title: "Week 1: Working with Data" }
 ];
 
