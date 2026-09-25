@@ -153,7 +153,7 @@
 
   function configureMarkdown() {
     if (markdownConfigured) return;
-    if (!window.marked?.use || !window.marked?.lexer || !window.marked?.parser ||
+    if (!window.CourseNotesHtmlMarkdown?.createHtmlRenderer || !window.marked?.use || !window.marked?.lexer || !window.marked?.parser ||
         !codeBlocks?.renderCodeBlock) {
       throw new Error("The Markdown renderer did not load. Check your internet connection and reload the preview.");
     }
@@ -210,6 +210,8 @@
 
   function createSourceRenderer() {
     const renderer = new window.marked.Renderer();
+    renderer.html = window.CourseNotesHtmlMarkdown.createHtmlRenderer(window.marked);
+    renderer.paragraph = window.CourseNotesHtmlMarkdown.createParagraphRenderer(window.marked);
 
     renderer.code = function (token) {
       return codeBlocks.renderCodeBlock(token, {
@@ -335,6 +337,7 @@
       clearPendingCodeCopies();
       const html = renderMarkdown(current.markdown);
       content.innerHTML = `<section class="note-section" data-sec="${current.sectionNumber}">${html}</section>`;
+      window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
 
       materializeSummaryReferenceLinks();
       wrapResidualDisplayMath();

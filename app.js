@@ -191,11 +191,13 @@ const inlineMathExtension = {
 };
 
 function configureMarkdown() {
-  if (!window.marked?.use || !window.marked?.parse || !codeBlocks?.renderCodeBlock) {
+  if (!window.CourseNotesHtmlMarkdown?.createHtmlRenderer || !window.marked?.use || !window.marked?.parse || !codeBlocks?.renderCodeBlock) {
     throw new Error("The Markdown renderer did not load.");
   }
 
   const renderer = new window.marked.Renderer();
+  renderer.html = window.CourseNotesHtmlMarkdown.createHtmlRenderer(window.marked);
+  renderer.paragraph = window.CourseNotesHtmlMarkdown.createParagraphRenderer(window.marked);
   renderer.code = (token) => codeBlocks.renderCodeBlock(token);
 
   window.marked.use({
@@ -251,6 +253,7 @@ async function loadAll() {
   const content = byId("content");
   const parts = await Promise.all(ORDERED_NOTES.map(loadNote));
   content.innerHTML = parts.join("\n");
+  window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
 
   materializeReferenceLinks(content);
   wrapUnprocessedDisplayMath(content);

@@ -618,6 +618,9 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   const previewCssUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'preview.css')
   );
+  const htmlMarkdownScriptUri = webview.asWebviewUri(
+    vscode.Uri.joinPath(extensionUri, 'media', 'html-markdown.js')
+  );
   const previewScriptUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'preview.js')
   );
@@ -677,6 +680,7 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   <script nonce="${nonce}" defer src="${sourceNavigationScriptUri}"></script>
   <script nonce="${nonce}" defer src="${equationNumberingScriptUri}"></script>
   <script nonce="${nonce}" defer src="${codeBlocksScriptUri}"></script>
+  <script nonce="${nonce}" defer src="${htmlMarkdownScriptUri}"></script>
   <script nonce="${nonce}" defer src="${previewScriptUri}"></script>
 </head>
 <body>

@@ -26,7 +26,7 @@
   --alg-color: rgb(18, 72, 145);
   --lem-color: rgb(84, 0, 162);
   --prop-color: rgb(0, 135, 54);
-  --ex-color: rgb(128, 24, 79);
+  --ex-color: rgb(0, 0, 0);
   --rmk-color: rgb(39, 130, 183);
   --cor-color: rgb(123, 255, 0);
 
@@ -35,7 +35,7 @@
   --alg-bkgd: rgba(18, 72, 145, 0.09);
   --lem-bkgd: rgba(84, 0, 162, 0.09);
   --prop-bkgd: rgba(0, 135, 54, 0.09);
-  --ex-bkgd: rgba(128, 24, 79, 0.09);
+  --ex-bkgd: rgba(256, 256, 256, 0.0);
   --rmk-bkgd: rgba(39, 130, 183, 0.09);
   --cor-bkgd: rgba(123, 255, 0, 0.09);
 }
@@ -205,6 +205,11 @@ a:focus-visible {
   margin: 0 0 var(--flow-space);
 }
 
+/* Keep table spacing consistent in prose, lists, and result environments. */
+#content table {
+  margin: var(--flow-space) 0;
+}
+
 #content ul,
 #content ol {
   margin: 0.5rem 0 var(--flow-space);
@@ -213,6 +218,11 @@ a:focus-visible {
 
 #content li + li {
   margin-top: 0.35rem;
+}
+
+/* Paragraphs keep normal spacing inside an item without widening item gaps. */
+#content li > p:last-child {
+  margin-bottom: 0;
 }
 
 #content li > ul,
