@@ -42,7 +42,7 @@ In this case, the average is nine.
 
 After you learn what the average grade was on the exam, what's your next move? You'll ask how far you were from the average, either above or below.
 
-Everyone can compute their own deviation from the mean. Summing all these differences always gives us zero: intuitively, the average distance from the average is zero.
+Everyone can compute their own deviation from the mean. Summing all these differences always gives us zero: intuitively, the average deviation from the average is zero.
 
 The next object is slightly mysterious: the squared deviation from the mean. Why should we square that value? If we want to examine how spread out the data is, using only the raw difference values is unhelpful: they always sum to zero. To truly understand how much people "deviate" from the mean, we need to account for people who are above *and* below the average: an easy way of making those values all nonnegative is to square them.
 
@@ -102,7 +102,7 @@ $$
 \bar x := \frac{1}{n} \sum_{i = 1}^n x_i, \qquad s^2 := \frac{1}{n - 1} \sum_{i = 1}^n (x_i - \bar x)^2.
 $$
 
-Notice that, for the mean, the computation is exactly the same: the only difference is interpretation. However, for the variance, the interpretation directly changes the computation. This is because the mean is involved in the computation: whether we have access to the true $\mu$ or only an estimate $\bar x$ determines whether we normalize by $1/N$ of $1/(n-1)$.
+Notice that, for the mean, the computation is exactly the same: the only difference is interpretation. However, for the variance, the interpretation directly changes the computation. This is because the mean is involved in the computation: whether we have access to the entire population&mdash;and hence $\mu$ and the population size $N$&mdash;or only a sample of size $n$ and an estimate $\bar x$ of the population mean determines whether we normalize by $1/N$ or $1/(n-1)$.
 
 ## Using Technology for Data Analysis
 
@@ -211,7 +211,7 @@ salary_data <- as.numeric(gsub("[$,]", "", data$Base.Salary))
 
 ```
 
-And we can finally plot the data. We give the plot a title and the x- and y- axes labels. We can also set the number of bars, which controls the granularity.
+And we can finally plot the data. We give the plot a title and the x- and y- axes labels. We can also suggest the number of bars, which controls the granularity.
 
 ```R
 hist(
@@ -252,7 +252,7 @@ What we learn is that humans are very biased in terms of how we think data *shou
 <div class="callout definition">
 <div class="label">Definition: Object to Define</div>
 
-Here is the definition. Here are the list of required properties:
+Here is the definition. Here is the list of required properties:
 
 <ol type="i">
   <li>property 1.</li>

@@ -160,7 +160,7 @@ Consider the last chunk, which is $A \cap B \cap C$. This one is the simplest: i
 
 <img src="figures/w2-A-B-C.png" alt="Figure-Title" style="display:block; width:80%; max-width:600px; height:auto; margin:1rem auto;">
 
-We now fill in the Venn diagram.
+We now fill in the Venn diagram. Specifically, you could use the following procedure: we have that $A \cap B \cap C$ has 10 individuals and $A \cap B$ has 25. Hence, the region $(A \cap B) \cap C^c$ must have 15 individuals. Similarly, we deduce that $(A \cap C) \cap B^c$ must have 10 individuals. We know that $A$ has 60 individuals total, and the size of every other small piece has been calculated, so we know that $A \setminus (B \cup C)$ must have 25 individuals. How do we fill in the smaller pieces for $B$ and $C$? This might seem difficult at first. But notice: we can compute $B \cup C$. We know that there are 25 people in $A$ that are not in $B$ or $C$, and there are 15 people that are in no group at all. We therefore calculate $25 + 15 = 40$ people in total that are not in $B$ or $C$. Therefore, $B \cup C$ must have 60 individuals. We know that there are 45 people in $B$ and 30 in $C$, and their sum is 75. Therefore, $B \cap C$ must have 15 people. 10 of them lie in the region that is further intersected with $A$, so 5 must lie in $(B \cap C) \cap A^c$. This finally gives the two remaining pieces: $B \setminus (A \cup C)$ must have 15 people, and $C \setminus (A \cup B)$ must have 5.
   
 <img src="figures/w2-commuters2-filled.png" alt="Figure-Title" style="display:block; width:80%; max-width:600px; height:auto; margin:1rem auto;">
 </li>
