@@ -15,9 +15,7 @@ We live in a world of data: information of all kinds is stored in all sorts of f
 When we work with data, what can it tell us? What assumptions do we need to make about the data to make it "useful"? How do we use data to communicate with others or better understand the world? What are we interested in as statisticians?
 
 <ol type="i">
-  <li>Estimation: if we have data, can we better understand qualities of an entity or group currently mysterious to us?
-  
-  A simple might be to </li>
+  <li>Estimation: if we have data, can we better understand qualities of an entity or group currently mysterious to us?</li>
   <li>Prediction: if we have data on a subject, can we predict how something will play out?</li>
   <li>Inference: if we have data, can we make convincing statements about the world?</li>
 </ol>
