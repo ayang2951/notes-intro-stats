@@ -1,4 +1,4 @@
-<div class="solution-visibility" data-show-solutions="false"></div>
+<div class="solution-visibility" data-show-solutions="true"></div>
 
 ## Sets and Operations
 
