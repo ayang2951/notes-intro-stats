@@ -1,4 +1,4 @@
-<div class="solution-visibility" data-show-solutions="false"></div>
+<div class="solution-visibility" data-show-solutions="true"></div>
 
 ## Conditional Probability (cont.)
 
@@ -232,7 +232,7 @@ Your boss tells you that, if the environmentalist group doesn't tell you *which*
 
 <ol type="1">
   <li>Suppose the number of trees is four and that after six months, exactly one tree has died. How many possible combinations could be logged?</li>
-  <li>If the number of trees planted is still four and I only know that two of the trees have died, how many combinations of sites could be logged?</li>
+  <li>If the number of trees planted is still four and two of the trees have died, how many combinations of sites could be logged?</li>
   <li>If the number of trees planted is still four and I only know that three of the trees have died, how many combinations of sites could be logged?</li>
   <li>If the number of trees planted is still four and I only know that *at least two* of the trees have died, how many combinations of sites could be logged?</li>
 </ol>
@@ -403,6 +403,8 @@ Let's investigate.
 
 </div>
 </details>
+
+There exists an interesting relationship between the Binomial and Bernoulli random variables.
 
 ### Cumulative Distribution Functions
 

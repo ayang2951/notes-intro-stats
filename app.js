@@ -1,9 +1,9 @@
 "use strict";
 
 const ORDERED_NOTES = [
-  { file: "week3.md", title: "Week 3: Probability & Random Variables" },
-  { file: "week2.md", title: "Week 2: Sets & Probability" },
-  { file: "week1.md", title: "Week 1: Working with Data" }
+  { file: "week3.md", title: "Week 3: Probability & Random Variables", sectionNumber: 3 },
+  { file: "week2.md", title: "Week 2: Sets & Probability", sectionNumber: 2 },
+  { file: "week1.md", title: "Week 1: Working with Data", sectionNumber: 1 }
 ];
 
 const CALLOUT_TYPES = [
@@ -219,10 +219,36 @@ function renderMarkdown(markdown) {
   return restoreMathSyntax(window.marked.parse(protectMathSyntax(markdown)));
 }
 
+function noteSectionNumber(note) {
+  const sectionNumber = Number(note?.sectionNumber);
+  return Number.isSafeInteger(sectionNumber) && sectionNumber > 0
+    ? sectionNumber
+    : null;
+}
+
+function validateNoteSections(notes) {
+  const usedNumbers = new Set();
+
+  notes.forEach((note) => {
+    const sectionNumber = noteSectionNumber(note);
+    if (sectionNumber === null) {
+      throw new Error(`Invalid section number for ${note?.file || "an unnamed note"}.`);
+    }
+    if (usedNumbers.has(sectionNumber)) {
+      throw new Error(`Section number ${sectionNumber} is assigned more than once.`);
+    }
+    usedNumbers.add(sectionNumber);
+  });
+}
+
 function sectionMarkup(note, index, body) {
-  const sectionNumber = index + 1;
+  const sectionNumber = noteSectionNumber(note);
+  if (sectionNumber === null) {
+    throw new Error(`Invalid section number for ${note?.file || "an unnamed note"}.`);
+  }
+
   return [
-    `<section id="sec-${sectionNumber}" class="note-section" data-sec="${sectionNumber}" data-file="${escapeHtml(note.file)}">`,
+    `<section id="sec-${sectionNumber}" class="note-section" data-sec="${sectionNumber}" data-auto-id-section="${index + 1}" data-file="${escapeHtml(note.file)}">`,
     `<h1>${escapeHtml(note.title)}</h1>`,
     body,
     "</section>"
@@ -253,6 +279,7 @@ async function loadNote(note, index) {
 
 async function loadAll() {
   const content = byId("content");
+  validateNoteSections(ORDERED_NOTES);
   const parts = await Promise.all(ORDERED_NOTES.map(loadNote));
   content.innerHTML = parts.join("\n");
   window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
@@ -490,6 +517,7 @@ function annotateReferenceTarget(element, label, number, semanticTarget = elemen
 function autoNumberCallouts() {
   byId("content").querySelectorAll(".note-section").forEach((section) => {
     const sectionNumber = section.dataset.sec || "0";
+    const autoIdSection = section.dataset.autoIdSection || sectionNumber;
     const counters = Object.fromEntries(CALLOUT_TYPES.map((type) => [type, 0]));
 
     section.querySelectorAll(".callout").forEach((callout) => {
@@ -498,7 +526,9 @@ function autoNumberCallouts() {
 
       counters[type] += 1;
       const number = `${sectionNumber}.${counters[type]}`;
-      if (!callout.id) callout.id = `${type}-${sectionNumber}-${counters[type]}`;
+      // Keep existing bookmark and direct-link IDs stable even when displayed
+      // section numbers are independent of page order.
+      if (!callout.id) callout.id = `${type}-${autoIdSection}-${counters[type]}`;
 
       const typeLabel = REFERENCE_LABELS.get(type);
       annotateReferenceTarget(callout, typeLabel, number);
@@ -1074,9 +1104,34 @@ function findNearestHeading(element) {
   return nearest;
 }
 
+function sectionNumberForElement(element) {
+  const section = element?.classList?.contains("note-section")
+    ? element
+    : element?.closest?.(".note-section");
+  const sectionNumber = Number(section?.dataset.sec);
+  return Number.isSafeInteger(sectionNumber) && sectionNumber > 0
+    ? sectionNumber
+    : null;
+}
+
+function bookmarkHeadingsInSectionOrder(content) {
+  return Array.from(content.querySelectorAll(".note-section"))
+    .map((section, pageIndex) => ({
+      section,
+      pageIndex,
+      sectionNumber: sectionNumberForElement(section)
+    }))
+    .sort((left, right) => {
+      const leftNumber = left.sectionNumber ?? Number.MAX_SAFE_INTEGER;
+      const rightNumber = right.sectionNumber ?? Number.MAX_SAFE_INTEGER;
+      return leftNumber - rightNumber || left.pageIndex - right.pageIndex;
+    })
+    .flatMap(({ section }) => Array.from(section.querySelectorAll("h1, h2, h3")));
+}
+
 function headingNumber(heading, counters) {
   if (heading.tagName === "H1") {
-    counters.h1 += 1;
+    counters.h1 = sectionNumberForElement(heading) ?? counters.h1 + 1;
     counters.h2 = 0;
     counters.h3 = 0;
     return `${counters.h1}. `;
@@ -1110,7 +1165,7 @@ function renderBookmarks() {
     if (button) setBookmarkButtonState(button, isBookmarked);
   });
 
-  const headings = Array.from(document.querySelectorAll("#content h1, #content h2, #content h3"));
+  const headings = bookmarkHeadingsInSectionOrder(content);
   headings.forEach((heading) => {
     if (!heading.dataset.plain) heading.dataset.plain = normalizeText(heading);
   });
