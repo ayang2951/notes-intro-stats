@@ -4,6 +4,11 @@
 
 <!--
 
+<img src="figures/name" alt="Figure-Title" style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;"></li>
+
+
+
+
 <div class="callout definition">
 <div class="label">Definition: Object to Define</div>
 

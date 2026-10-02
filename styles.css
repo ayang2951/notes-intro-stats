@@ -462,8 +462,18 @@ a:focus-visible {
   display: none !important;
 }
 
+/*
+ * Keep every collapsible closed to layout until its direct summary has been
+ * classified. This fail-closed default prevents a hidden solution from
+ * appearing briefly or being exposed if an older script is cached.
+ */
 .note-section .collapsible {
   display: none !important;
+}
+
+.note-section[data-solution-visibility-ready="true"]
+  .collapsible:not([data-collapsible-kind="solution"]) {
+  display: block !important;
 }
 
 .note-section > .solution-visibility[data-show-solutions="true"] ~ .collapsible,

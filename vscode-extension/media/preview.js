@@ -338,6 +338,9 @@
       const html = renderMarkdown(current.markdown);
       content.innerHTML = `<section class="note-section" data-sec="${current.sectionNumber}">${html}</section>`;
       window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
+      if (typeof window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles === "function") {
+        window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles(content);
+      }
 
       materializeSummaryReferenceLinks();
       wrapResidualDisplayMath();

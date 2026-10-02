@@ -1,7 +1,8 @@
 "use strict";
 
 const ORDERED_NOTES = [
-  { file: "week2.md", title: "Week 2: Sets & Probabilities" },
+  { file: "week3.md", title: "Week 3: Probability & Random Variables" },
+  { file: "week2.md", title: "Week 2: Sets & Probability" },
   { file: "week1.md", title: "Week 1: Working with Data" }
 ];
 
@@ -255,6 +256,9 @@ async function loadAll() {
   const parts = await Promise.all(ORDERED_NOTES.map(loadNote));
   content.innerHTML = parts.join("\n");
   window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
+  if (typeof window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles === "function") {
+    window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles(content);
+  }
 
   materializeReferenceLinks(content);
   wrapUnprocessedDisplayMath(content);

@@ -131,6 +131,38 @@
     return root;
   }
 
-  return { createHtmlRenderer, createParagraphRenderer, normalizeParagraphs };
+  // Solution visibility is controlled per Markdown file. Classify only
+  // collapsibles whose own summary is exactly "Solution" so proofs and other
+  // collapsible material remain available when solutions are hidden.
+  function classifySolutionCollapsibles(root) {
+    const sections = root.matches && root.matches('.note-section')
+      ? [root]
+      : Array.from(root.querySelectorAll('.note-section'));
+
+    sections.forEach(section => {
+      section.querySelectorAll('details.collapsible').forEach(collapsible => {
+        const summary = Array.from(collapsible.children)
+          .find(child => child.tagName && child.tagName.toLowerCase() === 'summary');
+        const label = String(summary ? summary.textContent : '')
+          .replace(/\s+/g, ' ')
+          .trim()
+          .toLowerCase();
+
+        if (label === 'solution') collapsible.setAttribute('data-collapsible-kind', 'solution');
+        else collapsible.removeAttribute('data-collapsible-kind');
+      });
+
+      section.setAttribute('data-solution-visibility-ready', 'true');
+    });
+
+    return root;
+  }
+
+  return {
+    createHtmlRenderer,
+    createParagraphRenderer,
+    normalizeParagraphs,
+    classifySolutionCollapsibles
+  };
 
 });

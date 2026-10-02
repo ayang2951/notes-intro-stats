@@ -233,7 +233,7 @@ Consider two sequences of coin tosses. Which is real?
 <img src="figures/w1-coin-tosses.png" alt="Salary Histograms" style="display:block; width:70%; max-width:600px; height:auto; margin:1rem auto;">
 
 <details class="collapsible">
-<summary>Answer</summary>
+<summary>Solution</summary>
 <div class="collapsible__content">
 
 The in-class live demonstration we did was more fun. But the same logic applies here: the first sequence has long strings of $0$s, while the second one does not. 
