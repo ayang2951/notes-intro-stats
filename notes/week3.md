@@ -240,7 +240,7 @@ More concretely, think about the following: I have 5 choices of candy for the fi
 
 Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways. This is visualized below.
 
-<img src="figures/w3-two-kids.png" alt="Candy orderings grouped by the first two candies given to the two children." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
+<img src="figures/w3-two-candy.png" alt="Candy orderings grouped by the first two candies given to the two children." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
 If child one is given green and child two yellow, there are $3!$ ways to arrange the remaining pieces of candy. The same is true if child one is given red and child two blue. We can organize all orderings of the 5 pieces into groups where the first two selections&mdash;the only ones that matter&mdash;are the same. We see that each group has $3! = 6$ orderings. Since we don't care about the last 3 pieces, we should count each group of $3!$ only once. This is why we divide by $3!$.
 </li>
