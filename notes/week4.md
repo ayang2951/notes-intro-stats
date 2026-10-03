@@ -1,5 +1,27 @@
 <div class="solution-visibility" data-show-solutions="false"></div>
 
+## Expectation and Variance for Discrete RVs
+
+Two very important quantities tied to a given distribution are the *expectation* and *variance*.
+
+### Expectation
+
+As always, we start with the definition.
+
+<div class="callout definition">
+<div class="label">Definition: Expectation of a Discrete RV</div>
+
+Let $X$ be a discrete random variable taking values in $\mathcal X$ with a pmf $p(x)$. The ***expectation*** of $X$, denoted $\mathbb E[X]$, is defined as
+
+$$
+\mathbb E[X] = \sum_{x \in \mathcal X} p(x) \cdot x.
+$$
+
+</div>
+
+The expectation captures the notion of an *average* or *mean*. In fact, this terminology is sometimes used interchangeably.
+
+
 
 
 <!--

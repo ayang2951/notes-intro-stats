@@ -256,7 +256,6 @@ Why do we have both $2!$ and $3!$ in the denominator? The $2!$ comes from the sa
 <img src="figures/w3-all-candy.png" alt="Twelve orderings for the same split of two candies to one child and three to the other." style="display:block; width:100%; max-width:1000px; height:auto; margin:1rem auto;">
 
 If I've already chosen for child one to receive yellow and pink and child two to receive red, green, and blue, there are $(5-3)! \cdot 3!$ ways to order those pieces. All 12 orderings give the same distribution of candy, so I only want to count them once. This is why we divide by $(5-3)! \cdot 3!$.
-
 </li>
 
 </ol>
@@ -535,11 +534,8 @@ Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
   </li>
 </ol>
 
-
 </div>
 
-
-### Mean and Variance
 
 
 
