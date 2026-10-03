@@ -520,21 +520,13 @@
     ));
     if (!matches.length) return;
 
-    const fragment = document.createDocumentFragment();
-    let cursor = 0;
-
-    matches.forEach((match) => {
-      fragment.append(value.slice(cursor, match.index));
-      const wrapper = document.createElement("span");
+    window.CourseNotesHtmlMarkdown.replaceTextNodeWithBlocks(textNode, matches, (match) => {
+      const wrapper = document.createElement("div");
       const aligned = equationNumbering?.parseOuterAlignEnvironment(match[0]);
       wrapper.className = `math-source-block display-math equation-display equation-display--embedded${aligned ? " aligned-equations" : ""}`;
       wrapper.textContent = match[0];
-      fragment.appendChild(wrapper);
-      cursor = match.index + match[0].length;
+      return wrapper;
     });
-
-    fragment.append(value.slice(cursor));
-    textNode.replaceWith(fragment);
   }
 
   function autoNumberEquations() {

@@ -230,6 +230,15 @@ a:focus-visible {
   margin-block: 0.35rem 0;
 }
 
+/* Keep a paragraph-to-list transition compact inside result and proof boxes. */
+#content :is(.callout, .collapsible__content) > p:has(+ :is(ul, ol)) {
+  margin-bottom: 0.5rem;
+}
+
+#content :is(.callout, .collapsible__content) > p + :is(ul, ol) {
+  margin-top: 0;
+}
+
 #content hr {
   margin: 1.5rem 0;
   border: 0;
@@ -245,6 +254,15 @@ a:focus-visible {
 
 .display-math {
   position: relative;
+}
+
+/* Equation bookmarks stay available without creating a separate text line. */
+.display-math > .bookmark-btn {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  margin: 0;
 }
 
 .numbered-equation > mjx-container[display="true"] {

@@ -2,7 +2,7 @@
   "name": "course-notes-preview",
   "displayName": "Course Notes Preview",
   "description": "A live, side-by-side preview for math-heavy Markdown course notes.",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "publisher": "local-notes",
   "license": "MIT",
   "engines": {
@@ -104,8 +104,8 @@
   },
   "scripts": {
     "check": "node --check media/html-markdown.js && node --check src/extension.js && node --check media/source-navigation.js && node --check media/equation-numbering.js && node --check media/equation-reference-index.js && node --check media/code-blocks.js && node --check media/preview.js && node --test test/*.test.js",
-    "package": "vsce package --out course-notes-preview-0.6.2.vsix",
-    "install:local": "code --install-extension course-notes-preview-0.6.2.vsix --force"
+    "package": "vsce package --out course-notes-preview-0.6.3.vsix",
+    "install:local": "code --install-extension course-notes-preview-0.6.3.vsix --force"
   },
   "devDependencies": {
     "marked": "18.0.11",

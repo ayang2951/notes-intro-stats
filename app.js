@@ -414,14 +414,11 @@ function wrapUnprocessedDisplayMath(root) {
   }
 
   nodes.forEach((textNode) => {
-    const fragment = document.createDocumentFragment();
     const source = textNode.textContent;
-    let cursor = 0;
     pattern.lastIndex = 0;
-    let match = pattern.exec(source);
+    const matches = Array.from(source.matchAll(pattern));
 
-    while (match) {
-      fragment.append(source.slice(cursor, match.index));
+    window.CourseNotesHtmlMarkdown.replaceTextNodeWithBlocks(textNode, matches, (match) => {
       const wrapper = document.createElement("div");
       const rawMath = match[0];
       const aligned = equationNumbering?.parseOuterAlignEnvironment(rawMath);
@@ -429,13 +426,8 @@ function wrapUnprocessedDisplayMath(root) {
       wrapper.textContent = aligned
         ? rawMath.trim()
         : `\\[\n${match[1].trim()}\n\\]`;
-      fragment.appendChild(wrapper);
-      cursor = pattern.lastIndex;
-      match = pattern.exec(source);
-    }
-
-    fragment.append(source.slice(cursor));
-    textNode.replaceWith(fragment);
+      return wrapper;
+    });
   });
 }
 
@@ -1060,7 +1052,7 @@ function setBookmarkButtonState(button, isBookmarked) {
 function addBookmarkButtons() {
   document.querySelectorAll("#content .bookmark-btn").forEach((button) => button.remove());
 
-  const blocks = Array.from(document.querySelectorAll("#content .callout, #content p"))
+  const blocks = Array.from(document.querySelectorAll("#content .callout, #content p, #content .display-math"))
     .filter((element) => (
       !element.classList.contains("reference-marker") &&
       (element.classList.contains("callout") || !element.closest(".callout"))

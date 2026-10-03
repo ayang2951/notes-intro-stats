@@ -131,6 +131,97 @@
     return root;
   }
 
+  function hasVisibleContent(element) {
+    return Array.from(element.childNodes).some(node => (
+      (node.nodeType === 1 && !node.matches('a[id]:empty, .reference-marker:empty, [aria-hidden="true"]:empty')) ||
+      (node.nodeType === 3 && node.textContent.trim())
+    ));
+  }
+
+  function moveStructuralNodes(element, container, reference) {
+    Array.from(element.childNodes).forEach(node => {
+      if (node.nodeType === 3 && !node.textContent.trim()) return;
+      container.insertBefore(node, reference);
+    });
+  }
+
+  function mergeParagraphAttributes(paragraph, block) {
+    Array.from(paragraph.attributes).forEach(attribute => {
+      if (attribute.name === 'class') {
+        attribute.value.split(/\s+/).filter(Boolean).forEach(name => block.classList.add(name));
+      } else if (!block.hasAttribute(attribute.name)) {
+        block.setAttribute(attribute.name, attribute.value);
+      }
+    });
+  }
+
+  // Display math found inside raw HTML is discovered after Markdown has already
+  // made paragraphs. Promote each generated block out of its paragraph so a
+  // block equation never inherits paragraph height or creates invalid nesting.
+  function promoteBlockOutOfParagraph(block, splitIndex) {
+    const paragraph = block.parentElement;
+    if (!paragraph || paragraph.tagName.toLowerCase() !== 'p' || !paragraph.parentNode) return;
+
+    const trailing = paragraph.cloneNode(false);
+    trailing.removeAttribute('id');
+    const sourceKey = trailing.getAttribute('data-source-key');
+    if (sourceKey) trailing.setAttribute('data-source-key', `${sourceKey}-after-${splitIndex + 1}`);
+
+    while (block.nextSibling) trailing.appendChild(block.nextSibling);
+
+    const container = paragraph.parentNode;
+    paragraph.removeChild(block);
+    container.insertBefore(block, paragraph.nextSibling);
+    if (hasVisibleContent(trailing)) container.insertBefore(trailing, block.nextSibling);
+    else moveStructuralNodes(trailing, container, block.nextSibling);
+
+    if (!hasVisibleContent(paragraph)) {
+      mergeParagraphAttributes(paragraph, block);
+      moveStructuralNodes(paragraph, container, block);
+      paragraph.remove();
+    } else {
+      ['data-source-line', 'data-source-end-line'].forEach(name => {
+        if (paragraph.hasAttribute(name) && !block.hasAttribute(name)) {
+          block.setAttribute(name, paragraph.getAttribute(name));
+        }
+      });
+      const blockSourceKey = paragraph.getAttribute('data-source-key');
+      if (blockSourceKey && !block.hasAttribute('data-source-key')) {
+        block.setAttribute('data-source-key', `${blockSourceKey}-block-${splitIndex + 1}`);
+      }
+    }
+  }
+
+  function replaceTextNodeWithBlocks(textNode, matches, createBlock) {
+    if (!textNode?.parentNode || typeof createBlock !== 'function') return [];
+
+    const source = textNode.textContent;
+    const orderedMatches = Array.from(matches || [])
+      .filter(match => Number.isSafeInteger(match?.index) && match.index >= 0 && match[0])
+      .sort((left, right) => left.index - right.index);
+    if (!orderedMatches.length) return [];
+
+    const fragment = textNode.ownerDocument.createDocumentFragment();
+    const blocks = [];
+    let cursor = 0;
+
+    orderedMatches.forEach(match => {
+      if (match.index < cursor) return;
+      fragment.append(source.slice(cursor, match.index));
+      const block = createBlock(match);
+      if (!block) return;
+      fragment.appendChild(block);
+      blocks.push(block);
+      cursor = match.index + match[0].length;
+    });
+
+    if (!blocks.length) return [];
+    fragment.append(source.slice(cursor));
+    textNode.replaceWith(fragment);
+    blocks.forEach(promoteBlockOutOfParagraph);
+    return blocks;
+  }
+
   // Solution visibility is controlled per Markdown file. Classify only
   // collapsibles whose own summary is exactly "Solution" so proofs and other
   // collapsible material remain available when solutions are hidden.
@@ -162,6 +253,7 @@
     createHtmlRenderer,
     createParagraphRenderer,
     normalizeParagraphs,
+    replaceTextNodeWithBlocks,
     classifySolutionCollapsibles
   };
 
