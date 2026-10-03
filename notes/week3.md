@@ -56,7 +56,7 @@ $$
 B_i \cap B_j = \emptyset \text{ for any } i \neq j, \qquad \bigcup_{i = 1}^n B_i = \Omega.
 $$
 
-In essence it means that we break apart the entire space into non-overlapping pieces $B_1, B_2, \ldots, B_n$. Further suppose that $\mathbb P(B_i) > 0$ for each $B_i$.
+In essence, this means that we break apart the entire space into non-overlapping pieces $B_1, B_2, \ldots, B_n$. Further suppose that $\mathbb P(B_i) > 0$ for each $B_i$.
 
 For any event $A$, the ***law of total probability*** states that
 
@@ -101,13 +101,13 @@ which is our desired result. Each equality corresponds to one of the preliminary
 </div>
 </details>
 
-The law of total probability can be visualized by segmenting the sample space for more intuition.
+The following figure gives a visual explanation of the law of total probability.
 
-<img src="figures/w3-law-total-probability.png" alt="Figure-Title" style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;"></li>
+<img src="figures/w3-law-total-probability.png" alt="summary." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
 In this figure, we see that the sample space $\Omega$ has been partitioned into six distinct, non-overlapping pieces, $B_1, B_2, \ldots, B_6$. Each one overlaps with $A$ (although this is not necessary for the law of total probability). Assume that the probability is distributed completely uniformly on the rectangle. This can be represented by throwing a dart randomly at the sample space.
 
-Intuitively, instead of computing the area of $A$ and taking the ratio with the entire $\Omega$, we could examine how much space $A$ takes up in each $B_i$ (more specifically, the part of $A$ in common with $B_i$). We then weight this by the area of $B_i$ itself. Obviously, we must account for the way we partitioned $\Omega$; different partitions of the space cannot give us different probabilities. Why do we weight by the probabilities of $B_i$? The larger that $B_i$ is, the more we need to know how $A$ behaves on that chunk, and the more important it is, so we weight it by more. Summing over all the chunks $B_i$ gives us the whole result, since we've accounted for every event in a collection that takes up the entire $\Omega$.
+Intuitively, instead of computing the area of $A$ and taking the ratio with the entire $\Omega$, we could examine the fraction of each $B_i$ that is occupied by $A$. We then weight this fraction by $\mathbb P(B_i)$, which in this uniform model is the fraction of the rectangle occupied by $B_i$. A larger $B_i$ has a larger probability, so it receives more weight. Summing over all the pieces gives us the whole result because the partition covers all of $\Omega$.
 
 Now, let's look at an example where both of these results are needed.
 
@@ -118,7 +118,7 @@ I just woke up, and I realize that I tragically left my phone at the department 
 
 Suppose there are only three categories of precipitation at this time of year: no rain (dry, event $D$), misting (very slight rain, event $M$), or storming (very heavy rain, event $S$). It's also not possible for any two of these types of precipitation to coincide. If it's only misting, I can just walk in the rain for a bit. If there's going to be a storm, I need my umbrella.
 
-I am a big fan of meteorology and know a couple facts.
+I am a big fan of meteorology and know a couple of facts.
 
 First, the probability that it storms on any given day is $\mathbb P(S) = 0.05$. Second, the probability that it's misting on any given day is $\mathbb P(M) = 0.1$.
 
@@ -126,9 +126,9 @@ I also know how likely cloud cover is to appear in the morning *given* the preci
 
 <ol type="1">
   <li>What probability am I interested in calculating before looking out the window, if I want to know whether to bring my umbrella?</li>
-  <li>If I look outside my window and determine that it's cloudy, what's the new probability that I'm interested in computing? Then write out the definition of conditional probability for this problem. Let's focus on the numerator first. Do we have this information? If not, can Bayes' theorem help?</li>
-  <li>Which part of the expression after using Bayes' rule do we still need to compute? What result can we use to compute it? Write out the full expression applying said result.</li>
-  <li>Which additional probability do we need to calculate before we can calculate out the actual number?</li>
+  <li>If I look outside my window and determine that it's cloudy, what's the new probability that I'm interested in computing? Then write out the definition of conditional probability for this problem. Let's focus on the numerator first. Do we have this information? If not, can Bayes' rule help?</li>
+  <li>Which part of the expression after using Bayes' rule do we still need to compute? What result can we use to compute it? Write out the full expression using that result.</li>
+  <li>Which additional probability do we need before we can calculate the actual number?</li>
   <li>Finally, compute the probability.</li>
 </ol>
 
@@ -148,7 +148,7 @@ Let's work it out.
   \mathbb P(S \,|\, C) = \frac{\mathbb P(C \cap S)}{\mathbb P(C)}.
   $$
   
-  We don't have $\mathbb P(C \cap S)$. If we use Bayes' theorem instead, we get
+  We don't have $\mathbb P(C \cap S)$. If we use Bayes' rule instead, we get
 
   $$
   \mathbb P(S \,|\, C) = \frac{\mathbb P(C \,|\, S) \cdot \mathbb P(S)}{\mathbb P(C)}.
@@ -170,19 +170,20 @@ Let's work it out.
   $$
   </li>
   <li>We are given all quantities in the formula above except for $\mathbb P(D)$. But great news! We do have the information needed to calculate it. We have that $\mathbb P(D) = 1 - (\mathbb P(M) + \mathbb P(S))$.</li>
-  <li>We can now finally compute out the probability. Using the information available and the quantity in part (4), we have that
+  <li>We can now compute the probability. Using the information available and the quantity in part (4), we have that
 
   $$
   \mathbb P(S \,|\, C) = \frac{(0.9)(0.05)}{(0.2)(0.85) + (0.6)(0.1) + (0.9)(0.05)}.
   $$
 
-  You don't need to calculate out the exact number.</li>
+  You don't need to calculate it out.
+  </li>
 </ol>
 
 </div>
 </details>
 
-### Combinatorics
+## Combinatorics
 
 Combinatorics is often a very confusing part of elementary probability. There are combinatorics problems that use only the introductory, simple principles but are nevertheless extremely tricky (I get them wrong, my PhD classmates get them wrong, my professors could easily get them wrong).
 
@@ -191,9 +192,9 @@ Let's not discuss the very intricate problems, but there are a few core ideas th
 <div class="callout definition">
 <div class="label">Definition: Permutation and Combination</div>
 
-Let $n, k \in \mathbb N$, where $k \leq n$.
+Let $n$ be a positive integer, and let $k$ be an integer with $0 \leq k \leq n$.
 
-The number of ***permutations*** $P(n, k)$ for selecting, without replaacement, a size-$k$ sequence from $n$ distinct items is
+The number of ***permutations*** $P(n, k)$ for selecting, without replacement, a size-$k$ sequence from $n$ distinct items is
 
 $$
 P(n, k) := \frac{n!}{(n - k)!}.
@@ -207,7 +208,7 @@ $$
 
 </div>
 
-Combinations are perhaps more commonly seen with the notation 
+Combinations are perhaps more commonly seen with the notation
 $$
 C(n, k) = {n \choose k}.
 $$
@@ -215,26 +216,83 @@ $$
 Note that the difference between the permutation and combination formulas is the additional $k!$ factor in the denominator. Let's go into detail on *why* this additional factor appears with an example.
 
 <div class="callout example">
+<div class="label">Example: Candy Distribution</div>
+
+Suppose there are five pieces of differently flavored candy and five children.
+
+<ol type="1">
+
+<li>Suppose I distribute the candy to the children, one per child. I can compute the number of ways to do this using permutations: I have 5 choices total, and I need to choose all 5 of them. Using permutations, this is
+
+$$
+P(5, 5) = \frac{5!}{(5 - 5)!} = 5 \cdot 4 \cdot 3 \cdot 2 \cdot 1.
+$$
+
+More concretely, think about the following: I have 5 choices of candy for the first child, 4 for the second, 3 for the third, 2 for the fourth, and 1 for the last. Using the multiplication rule, I have $5!$ possibilities.</li>
+
+<li>Suppose only the first two children have been good today. The number of ways I can distribute one candy per deserving child can still be computed using permutations. This time, I'm only selecting 2 pieces from the 5. Hence, we have
+
+$$
+P(5, 2) = \frac{5!}{(5 - 2)!} = \frac{5!}{3!} = 5 \cdot 4.
+$$
+
+More concretely, think about the following: I have 5 choices of candy for the first child and 4 for the second.
+
+Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways. This is visualized below.
+
+<img src="figures/w3-two-kids.png" alt="Candy orderings grouped by the first two candies given to the two children." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
+
+If child one is given green and child two yellow, there are $3!$ ways to arrange the remaining pieces of candy. The same is true if child one is given red and child two blue. We can organize all orderings of the 5 pieces into groups where the first two selections&mdash;the only ones that matter&mdash;are the same. We see that each group has $3! = 6$ orderings. Since we don't care about the last 3 pieces, we should count each group of $3!$ only once. This is why we divide by $3!$.
+</li>
+
+<li>I might as well give away all 5 pieces. The second deserving child behaved slightly better than the first, so I'll give the second child 3 pieces and the first child 2. We're going to use combinations here: the order I give the candy to *each* child doesn't matter. Since there are only two children being given candy, splitting the candy into 3 and 2 is the same as choosing 3 to give to the second child. Hence, we can use combinations to obtain
+
+$$
+C(5, 3) = \frac{5!}{(5 - 3)! \, 3!} = \frac{5!}{2!\,3!} = \frac{5 \cdot 4}{2 \cdot 1}.
+$$
+
+Why do we have both $2!$ and $3!$ in the denominator? The $2!$ comes from the same logic as the permutation case: if I choose 3 pieces of candy for child two, the ordering of the remaining pieces doesn't matter, since they're both going to child one. But the same holds here for the three selected pieces now too: these three are *also* going to the same child, so the ordering within the selected pieces is inconsequential too. We visualize this with the following figure.
+
+<img src="figures/w3-all-candy.png" alt="Twelve orderings for the same split of two candies to one child and three to the other." style="display:block; width:100%; max-width:1000px; height:auto; margin:1rem auto;">
+
+If I've already chosen for child one to receive yellow and pink and child two to receive red, green, and blue, there are $(5-3)! \cdot 3!$ ways to order those pieces. All 12 orderings give the same distribution of candy, so I only want to count them once. This is why we divide by $(5-3)! \cdot 3!$.
+
+</li>
+
+</ol>
+
+</div>
+
+<div class="callout remark">
+<div class="label">Remark: Multinomials</div>
+
+If I choose to distribute candy to more than two children, this would be a *multinomial* problem. This has not been covered.
+
+</div>
+
+Using the intuition gained from this example, let's work out the following problem (this was the problem worked through in recitation).
+
+<div class="callout example">
 <div class="label">Example: Planting Trees</div>
 
-The lord of a fancy estate has hired you to plant ten different species of trees in ten designated spots on his property. 
+The lord of a fancy estate has hired you to plant ten different species of trees in ten designated spots on his property.
 
 <ol type="1">
   <li>Suppose the lord gives you permission to plant the trees in whichever spots you want. How many ways are there to plant the ten trees in the ten spots?</li>
-  <li>Suppose that three of the ten spots are in the front yard, and the lord asks you to select three particularly magnificent species to display in three special spots in his front yard. How many ways can you choose three special trees from the ten and plant them?</li>
+  <li>Suppose that three of the ten spots are in the front yard, and the lord asks you to select three particularly magnificent species to display there. How many ways can you choose three of the ten trees and assign them to the three distinct spots?</li>
 </ol>
 
-An environmentalist group has hired you to plant numerous identical trees in already-dug holes on a patch of land. These trees are unfortunately very delicate and die easily, and if any trees die over the winter, you want to log the sites that need to be replanted. 
+An environmentalist group has hired you to plant numerous identical trees in already-dug holes on a patch of land. These trees are unfortunately very delicate and die easily, and if any trees die over the winter, you want to log the sites that need to be replanted.
 
-When you log the sites, the order doesn't matter: your internal algorithm will automatically identify the optimal replanting order when the next fall comes.
+When you log the sites, their order does not matter.
 
-Your boss tells you that, if the environmentalist group doesn't tell you *which* site's tree has died, you need to log all the possibilities.
+Your boss tells you that, if the environmentalist group doesn't tell you *which* trees have died, you need to log every possible set of sites.
 
 <ol type="1">
-  <li>Suppose the number of trees is four and that after six months, exactly one tree has died. How many possible combinations could be logged?</li>
-  <li>If the number of trees planted is still four and two of the trees have died, how many combinations of sites could be logged?</li>
-  <li>If the number of trees planted is still four and I only know that three of the trees have died, how many combinations of sites could be logged?</li>
-  <li>If the number of trees planted is still four and I only know that *at least two* of the trees have died, how many combinations of sites could be logged?</li>
+  <li>Suppose four trees were planted and exactly one tree has died after six months. How many possible sets of sites could be logged?</li>
+  <li>If four trees were planted and two have died, how many possible sets of sites could be logged?</li>
+  <li>If four trees were planted and three have died, how many possible sets of sites could be logged?</li>
+  <li>If four trees were planted and *at least two* have died, how many possible sets of sites could be logged?</li>
 </ol>
 
 </div>
@@ -246,8 +304,8 @@ Your boss tells you that, if the environmentalist group doesn't tell you *which*
 Let's discuss the first part of this example. Since the trees are all distinct, the ordering in your arrangement matters.
 
 <ol type="1">
-  <li>If I can plant the ten trees in the ten spots in whatever arrangement I want, the number of ways to plant is simply $10!$. I'll look at each spot sequentially: the first spot has 10 options of tree, the second has 9, the third has 8, and so forth. The last spot has only 1 tree possibility remaining. This is the *multiplication rule*.</li>
-  <li>This is a permutation problem. Since the three spots in his yard are distinct, the order you choose the trees still matters. The first spot has 10 choices, the second has 9, and the third has 8. Therefore, we get $10 \cdot 9 \cdot 8$ for the number of ways to choose three trees for the three spots.
+  <li>If I can plant the ten trees in the ten spots in whatever arrangement I want, the number of ways to plant is simply $10!$. I'll look at each spot sequentially: the first spot has 10 choices for the tree, the second has 9, the third has 8, and so forth. The last spot has only 1 tree possibility remaining. This is the *multiplication rule*.</li>
+  <li>This is a permutation problem. Since the three spots in his yard are distinct, which tree goes in which spot matters. The first spot has 10 choices, the second has 9, and the third has 8. Therefore, we get $10 \cdot 9 \cdot 8$ assignments of trees to the three spots.
   
   How do we express this as a permutation? Note that
   
@@ -258,12 +316,12 @@ Let's discuss the first part of this example. Since the trees are all distinct, 
   Hence, the answer can be expressed in factorial or permutation form.</li>
 </ol>
 
-Let's discuss the second part now. My trees are identical and the order I log the sites doesn't matter, so I'll probably be using combinations.
+Let's discuss the second part now. The trees are identical and the order in which I log the sites does not matter, so we will use combinations.
 
 <ol type="1">
 
 <li>If exactly one tree has died, it could be the first, second, third, or fourth site. Therefore, there are four possibilities.</li>
-<li>If two of the trees have died, I would log two sites: the first site I log could be any of the four, and the second site I log has three remaining possibilities. But wait! Multiplying $4 \cdot 3$ directly would be double counting. If I log site 1 first and site 3 second, this is the same as logging site 3 first and site 1 second. The number of ways I double counted is 2. Hence, I need to divide by $2!$. Using combinations, this would be
+<li>If two of the trees have died, I would log two sites: the first site I log could be any of the four, and the second site has three remaining possibilities. Multiplying $4 \cdot 3$ counts each pair twice. For example, logging site 1 and then site 3 gives the same pair as logging site 3 and then site 1. Hence, I need to divide by $2!$. Using combinations, this gives
 
 $$
 C(4, 2) = \frac{4!}{(4 - 2)! \, 2!} = \frac{4 \cdot 3 \cdot 2 \cdot 1}{(2 \cdot 1)(2 \cdot 1)} = 6.
@@ -271,18 +329,19 @@ $$
 
 </li>
 
-<li>If three trees have died, I would log three sites: the first I log could be any of the four, the second could be any of the remaining three, and the third could be either of the remaining two. However, multiplying $4 \cdot 3 \cdot 2$ is still over-counting: I need to account for how many times I over-counted. Each set of three sites has $3!$ ways of ordering, and I should only count one of them as a distinct logging. Therefore, I need to divide by $3!$. I get
+<li>If three trees have died, I would log three sites: the first could be any of the four, the second could be any of the remaining three, and the third could be either of the remaining two. Multiplying $4 \cdot 3 \cdot 2$ counts each set of three sites in $3!$ different orders, but I should count each set only once. Therefore, I need to divide by $3!$. I get
 
 $$
 C(4, 3) = \frac{4!}{(4 - 3)! \, 3!} = \frac{4 \cdot 3 \cdot 2 \cdot 1}{(1!) (3 \cdot 2 \cdot 1)} = 4.
 $$
 </li>
 
-<li>If at least two trees have died, either two died, three died, or four died. The first two cases were computed above. If all four died, I need to log all four, and there's only one way to do that. Hence, the number of possible loggings is
+<li>If at least two trees have died, either two died, three died, or four died. The first two cases were computed above. If all four died, I need to log all four, and there's only one way to do that. Hence, the number of possible sets of sites is
 
 $$
 6 + 4 + 1 = 11.
 $$
+</li>
 </ol>
 
 </div>
@@ -291,7 +350,7 @@ $$
 
 ## Random Variables
 
-What are random variables? As always, let's start with the rigorous definition.
+What are random variables? Let's start with the definition used in this course.
 
 <div class="callout definition">
 <div class="label">Definition: Random Variable</div>
@@ -304,17 +363,17 @@ This is where a lot of students get confused. A random variable, despite its nam
 
 The most obvious example of this is a coin flip: either we get heads or we get tails. How do we turn the result of a coin flip into a numerical object that we can do math with? By using a random variable, of course! If we define a random variable $X$ such that $X = 1$ when the coin flip is heads and $X = 0$ when the coin flip is tails, $X$ is a random variable that maps the sample space, which in this case is $\Omega = \{\text{heads}, \text{tails}\}$, into something numeric. Note that I could also choose to assign the values differently: I could choose $X = 1$ if the coin is tails, and $X = 0$ when it's heads. Or I could choose $X = 1$ when the coin is heads and $X = -1$ when the coin is tails. All that is required is a numerical encoding of the outcomes in the sample space.
 
-Let's look at a *slightly* more complicated example: suppose I have a six-sided die. Outcomes from rolling said die can also very easily (and even more intuitively) be represented with numbers. Suppose I roll one die.
+Let's look at a *slightly* more complicated example with a six-sided die. Suppose an outcome records the full configuration of the three visible faces, not only the number on top. The sample space then contains all possible visible configurations. Suppose I roll the die and see the following outcome.
 
-<img src="figures/w3-die-roll-outcome.png" alt="Figure-Title" style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;"></li>
+<img src="figures/w3-die-roll-outcome.png" alt="A die showing 5 on top, 3 on the front, and 1 on the right." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
-If the above is what I see, is it already a numerical value? Not yet. I would still have to create a random variable $X$ where $X$ takes the value of whichever number lands on top. For the outcome above, it's $X = 5$. Compared to the coin flip example, it's just a little more obvious which numbers I should assign which outcomes.
+The outcome above is a configuration rather than a single number. Define a random variable $X$ to be the number that lands on top. For this outcome, $X = 5$.
 
-If it's still not clear, we can look at a more detailed example. Suppose I define my sample space to be "all configurations of the three sides that I can see."
+Different configurations can produce the same value of $X$. Consider the following two outcomes.
 
-<img src="figures/w3-dice-roll-outcomes.png" alt="Figure-Title" style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;"></li>
+<img src="figures/w3-dice-roll-outcomes.png" alt="Two die configurations with 5 on top but different values on the visible sides." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
-The two outcomes visualized here are two different configurations (outcomes) within the sample space. If I still define my random variable $X$ to be "the number that lands on top," we have that $X = 5$ for *both* of the outcomes above. This is why we need to be very specific about how we define our random variables.
+These are different outcomes because the visible side faces differ, but $X = 5$ for both. A random variable can assign the same number to more than one outcome, so we need to define it precisely.
 
 The most important thing to remember about random variables is this: they are *functions*. We use them because we want numerical representations of the sample space.
 
@@ -325,7 +384,7 @@ Random variables called *discrete* random variables have probability mass functi
 <div class="callout remark">
 <div class="label">Remark: Discrete Random Variables</div>
 
-The rigorous requirement for a discrete random variable $X$ is that the set of values $X$ can take is *countable*. But if you don't know what this means, just ignore that: an intuition is enough. The important thing to remember is that discrete random variables *can* take infinitely many values.
+The set of values a discrete random variable can take is *countable*. This means that its values can be placed in a finite or infinite list. In particular, a discrete random variable can take infinitely many values.
 
 </div>
 
@@ -334,7 +393,13 @@ Every discrete random variable has a probability mass function (pmf).
 <div class="callout definition">
 <div class="label">Definition: Probability Mass Function</div>
 
-Let $X$ be a discrete random variable, and let $\mathcal X$ be the set of values $X$ can take. A ***probability mass function*** $p(x)$ is a function where
+Let $X$ be a discrete random variable, and let $\mathcal X$ be the set of values $X$ can take. The ***probability mass function*** of $X$ is
+
+$$
+p(x) := \mathbb P(X = x), \qquad x \in \mathcal X.
+$$
+
+It satisfies
 
 $$
 p(x) \in [0, 1] \qquad \text{for all } x \in \mathcal X,
@@ -346,20 +411,32 @@ $$
 \sum_{x \in \mathcal X} p(x) = 1.
 $$
 
-This means that the pmf $p(x) = \mathbb P(X = x)$ at any $x$&mdash;the probability that $X$ takes the value $x$&mdash;must be between zero and one (which of course is the case for all probabilities), and that the sum of all the probabilities must be equal to one.
+This means that the probability that $X$ takes any particular value must be between zero and one, and the probabilities of all possible values must sum to one.
 
 </div>
 
-Let's look at a few examples of "commonly" seen distributions (pmfs) on random variables.
+Let's look at two common distributions for discrete random variables.
 
-The *Bernoulli* random variable, $X \sim \text{Bernoulli}(\rho)$, is the simplest "recognizable" (common) one. It takes two values: either $X = 0$ or $X = 1$. We have that $p(1) = \rho, p(0) = 1 - \rho$. Note that we need $\rho \in [0, 1]$. 
+One basic example is the *Bernoulli* random variable, $X \sim \text{Bernoulli}(\rho)$. It takes two values: either $X = 0$ or $X = 1$. We have that
 
-The next most common is the *Binomial* distribution. This can be represented as the sum of many independent Bernoullis with the same probability. Let's now look at an example of a Binomial random variable.
+$$
+p(1) = \rho, \quad p(0) = 1 - \rho.
+$$
+
+Here, $\rho \in [0, 1]$.
+
+Another common distribution is the *Binomial* distribution. Let $n$ be a positive integer and let $\rho \in [0, 1]$. A random variable $X \sim \text{Binomial}(n, \rho)$ counts the number of successes in $n$ independent trials, each with success probability $\rho$. Equivalently, $X$ is the sum of $n$ independent $\text{Bernoulli}(\rho)$ random variables. Its pmf is
+
+$$
+\mathbb P(X = x) = {n \choose x} \rho^x (1 - \rho)^{n - x}, \qquad x \in \{0, 1, \ldots, n\},
+$$
+
+and zero everywhere else.
 
 <div class="callout example">
 <div class="label">Example: Binomial Probabilities</div>
 
-Back to the second tree example: you did such a good job last year that they hire you again, this time to plant 10 trees. The trees all have equal probability $0.8$ of surviving, with each tree's survival independent of all others.
+Back to the second tree example: you did such a good job last year that the group hires you again, this time to plant 10 trees. The trees all have probability $0.8$ of surviving, and each tree's survival is independent of all the others.
 
 <ol type="1">
   <li>What random variable is appropriate to model the number of tree deaths?</li>
@@ -383,12 +460,13 @@ Let's investigate.
   $$
   X \sim \text{Binomial}(10, 0.2).
   $$
+  </li>
   <li>Using the binomial probabilities, we have that
   
   $$
   \mathbb P(X = 2) = {10 \choose 2} (0.2)^2 (0.8)^8.
   $$</li>
-  <li>If at least 8 trees die, either 8, 9, or 10 trees died. We can simply compute the probabilities and add them:
+  <li>If at least 8 trees die, either 8, 9, or 10 trees die. We can compute the probabilities and add them:
   
   $$
   \mathbb P(X \geq 8) = {10 \choose 8} (0.2)^8(0.8)^2 + {10 \choose 9} (0.2)^9(0.8)^1 + {10 \choose 10} (0.2)^{10}(0.8)^0.
@@ -403,8 +481,6 @@ Let's investigate.
 
 </div>
 </details>
-
-There exists an interesting relationship between the Binomial and Bernoulli random variables.
 
 ### Cumulative Distribution Functions
 
@@ -421,7 +497,7 @@ $$
 
 </div>
 
-It is critical you remember that the definition is *less than or equal to*. The choice to make it a non-strict inequality instead of strict is not really meaningful. In fact, Soviet mathematicians defined it in the opposite way: with a strict inequality. But since the convention here and now is the non-strict inequality, it's important to remember it.
+It is critical you remember that the definition is *less than or equal to*. The choice to define the cdf using a non-strict inequality instead of strict is a bit arbitrary. In fact, Soviet mathematicians defined it in the opposite way: with a strict inequality. But since the definition here and now uses a non-strict inequality, it's important to remember it.
 
 The cdf has a few properties you should also know.
 
@@ -447,7 +523,7 @@ Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
   <li>The cdf is right-continuous, meaning
   
   $$
-  \lim_{x^+ \downarrow \, x} F(x^+) = F(x).
+  \lim_{t \downarrow x} F(t) = F(x).
   $$
   
   As we approach the value $x$ from the right, it has to match $F(x)$. This is not necessarily true as we approach from the left.</li>
@@ -456,6 +532,7 @@ Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
   $$
   \lim_{x \rightarrow -\infty} F(x) = 0, \qquad \lim_{x \rightarrow +\infty} F(x) = 1.
   $$
+  </li>
 </ol>
 
 
