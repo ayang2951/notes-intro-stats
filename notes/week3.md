@@ -230,7 +230,7 @@ $$
 
 More concretely, think about the following: I have 5 choices of candy for the first child, 4 for the second, 3 for the third, 2 for the fourth, and 1 for the last. Using the multiplication rule, I have $5!$ possibilities.</li>
 
-<li>Suppose only the first two children have been good today. The number of ways I can distribute one candy per deserving child can still be computed using permutations. This time, I'm only selecting 2 pieces from the 5. Hence, we have
+<li>Suppose only the first two children have been good today. The number of ways I can distribute one candy per virtuous, deserving child can still be computed using permutations. This time, I'm only selecting 2 pieces from the 5. Hence, we have
 
 $$
 P(5, 2) = \frac{5!}{(5 - 2)!} = \frac{5!}{3!} = 5 \cdot 4.
@@ -238,7 +238,7 @@ $$
 
 More concretely, think about the following: I have 5 choices of candy for the first child and 4 for the second.
 
-Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways. This is visualized below.
+Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. This is equivalent to arranging the candy for all five children but witholding the candy from the three undeserving children. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways for the children who will never receive them. This is visualized below.
 
 <img src="figures/w3-two-candy.png" alt="Candy orderings grouped by the first two candies given to the two children." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
