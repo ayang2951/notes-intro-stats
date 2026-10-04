@@ -215,6 +215,7 @@ $$
 
 Note that the difference between the permutation and combination formulas is the additional $k!$ factor in the denominator. Let's go into detail on *why* this additional factor appears with an example.
 
+<a id="example:candy"></a>
 <div class="callout example">
 <div class="label">Example: Candy Distribution</div>
 
