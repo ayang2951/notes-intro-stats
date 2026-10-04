@@ -236,7 +236,7 @@ Consider two sequences of coin tosses. Which is real?
 <summary>Solution</summary>
 <div class="collapsible__content">
 
-The in-class live demonstration we did was more fun. But the same logic applies here: the first sequence has long strings of $0$s, while the second one does not. 
+The in-class live demonstration we did was more fun. But the same logic applies here: the first sequence has long strings of $0$s, while the second one does not. The first one is the sequence of real coin tosses.
 
 We can use the longest sequence of $0$s or $1$s, as well as the number of changes between $0$s and $1$s, to guess.
 
