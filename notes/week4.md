@@ -208,7 +208,7 @@ $$
 The exact formula, written out in integral form, would be
 
 $$
-\operatorname{Var}(X) = \int_{\mathcal X} f(x) \cdot x^2 \, \mathrm dx - \left(\int_{\mathcal X} f(x) \cdot x \, \mathrm dx\right)^2.
+\operatorname{Var}(X) = \int_{-\infty}^\infty f(x) \cdot x^2 \, \mathrm dx - \left(\int_{-\infty}^\infty f(x) \cdot x \, \mathrm dx\right)^2.
 $$
 
 
