@@ -185,7 +185,7 @@ Let's work it out.
 
 ## Combinatorics
 
-Combinatorics is often a very confusing part of elementary probability. There are combinatorics problems that use only the introductory, simple principles but are nevertheless extremely tricky (I get them wrong, my PhD classmates get them wrong, my professors could easily get them wrong).
+Combinatorics is often a very confusing part of elementary probability. There are combinatorics problems that use only the introductory, simple principles but are nevertheless extremely tricky (I get them wrong; my PhD classmates get them wrong; my professors could easily get them wrong).
 
 Let's not discuss the very intricate problems, but there are a few core ideas that are critical for future discussions.
 
@@ -239,7 +239,7 @@ $$
 
 More concretely, think about the following: I have 5 choices of candy for the first child and 4 for the second.
 
-Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. This is equivalent to arranging the candy for all five children but witholding the candy from the three undeserving children. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways for the children who will never receive them. This is visualized below.
+Why do we divide by the $(5 - 2)! = 3!$ in the denominator? It's because, when we have $5!$ in the numerator, we've overcounted the orderings of the last 3 pieces of candy when their orders don't matter. This is equivalent to arranging the candy for all five children but withholding the candy from the three undeserving children. For each fixed assignment to the first two children, the remaining 3 pieces can be ordered in $3!$ ways for the children who will never receive them. This is visualized below.
 
 <img src="figures/w3-two-candy.png" alt="Candy orderings grouped by the first two candies given to the two children." style="display:block; width:90%; max-width:600px; height:auto; margin:1rem auto;">
 
@@ -497,14 +497,22 @@ $$
 
 </div>
 
-It is critical you remember that the definition is *less than or equal to*. The choice to define the cdf using a non-strict inequality instead of strict is a bit arbitrary. In fact, Soviet mathematicians defined it in the opposite way: with a strict inequality. But since the definition here and now uses a non-strict inequality, it's important to remember it.
+We can compute the CDF using the pmf. Specifically, if a random variable $X$ has a pmf $p(x)$, the CDF can be written
+
+$$
+F(x) = \sum_{\substack{k \in \mathcal X \\ k \leq x}} p(k).
+$$
+
+This sums over the probabilities that $X$ takes any value $k$ for $k \leq x$, giving us precisely the probability that $X \leq x$.
+
+It is critical you remember that the definition is *less than or equal to*. The choice to define the cdf using a non-strict inequality instead of a strict inequality is a bit arbitrary. In fact, Soviet mathematicians defined it in the opposite way: with a strict inequality. But since the definition here and now uses a non-strict inequality, it's important to remember it.
 
 The cdf has a few properties you should also know.
 
 <div class="callout proposition">
 <div class="label">Proposition: Properties of the Cumulative Distribution Function</div>
 
-Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
+Let $X$ be a random variable, and let $F$ be its cdf. Then
 
 <ol type="1">
   <li>The cdf is lower-bounded by zero and upper-bounded by one, meaning
@@ -526,8 +534,8 @@ Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
   \lim_{t \downarrow x} F(t) = F(x).
   $$
   
-  As we approach the value $x$ from the right, it has to match $F(x)$. This is not necessarily true as we approach from the left.</li>
-  <li>Taking the limit as $x \rightarrow -\infty$ and $x \rightarrow +\infty$ gives us probabilities approaching zero and one, respectively:
+  As we approach the value $x$ from the right, the limit has to match $F(x)$. This is not necessarily true as we approach from the left.</li>
+  <li>Taking the limits as $x \rightarrow -\infty$ and $x \rightarrow +\infty$ gives us probabilities approaching zero and one, respectively:
 
   $$
   \lim_{x \rightarrow -\infty} F(x) = 0, \qquad \lim_{x \rightarrow +\infty} F(x) = 1.
@@ -536,6 +544,153 @@ Let $X$ be a random variable, and let $F(x)$ be its cdf. Then
 </ol>
 
 </div>
+
+
+## Expectation and Variance for Discrete RVs
+
+Two very important quantities tied to a given distribution are the *expectation* and *variance*.
+
+### Expectation
+
+As always, we start with the definition.
+
+<div class="callout definition">
+<div class="label">Definition: Expectation of a Discrete RV</div>
+
+Let $X$ be a discrete random variable taking values in $\mathcal X$ with a pmf $p(x)$. The ***expectation*** of $X$, denoted $\mathbb E[X]$, is defined as
+
+$$
+\mathbb E[X] = \sum_{x \in \mathcal X} p(x) \cdot x.
+$$
+
+</div>
+
+The expectation captures the notion of an *average* or *mean*. In fact, these terms are sometimes used interchangeably.
+
+The expectation can also be understood physically: it is the *center of mass* or the *point of balance* for the distribution. If I were to obtain a cardboard cutout of the distribution, I could balance it on my finger at the expectation.
+
+The expectation has several important properties.
+
+<div class="callout proposition">
+<div class="label">Proposition: Linearity of Expectation</div>
+
+Let $X$ be a discrete random variable, and let $a, b \in \mathbb R$ be constants. Then
+
+$$
+\mathbb E[aX + b] = a\mathbb E[X] + b.
+$$
+
+</div>
+
+<!--
+<details class="collapsible">
+<summary>Proof</summary>
+<div class="collapsible__content">
+
+Let $p(x)$ denote the pmf of $X$ and let $\mathcal X$ be the image of $X$. Then we have
+
+$$
+\mathbb E[aX + b] \overset{(1)}= \sum_{x \in \mathcal X} p(x) \cdot (ax + b) \overset{(2)}= a \sum_{x \in \mathcal X} p(x) \cdot x + b \sum_{x \in \mathcal X} p(x) \overset{(3)}= a\mathbb E[X] + b.
+$$
+
+Equality $(1)$ follows because if $X$ takes value $x$ with probability $p(x)$, then $aX + b$ takes value $ax + b$ with probability $p(x)$ too. For $(2)$, we pull out the constants and split the sum. The last step $(3)$ follows because $\sum_{x \in \mathcal X}p(x)\cdot x$ is precisely the definition of $\mathbb E[X]$, and because $\sum_{x \in \mathcal X}p(x) = 1$ because $p$ is a pmf.
+
+</div>
+</details>
+
+-->
+
+### Variance
+
+We again start with the definition.
+
+<div class="callout definition">
+<div class="label">Definition: Variance of a Discrete RV</div>
+
+Let $X$ be a discrete random variable taking values in $\mathcal X$ with a pmf $p(x)$. The ***variance*** of $X$, denoted $\operatorname{Var}(X)$, is defined as
+
+$$
+\operatorname{Var}(X) = \mathbb E[(X - \mathbb E[X])^2].
+$$
+
+</div>
+
+We can interpret the variance as follows: we subtract off the mean $\mathbb E[X]$ for every value the random variable can take, and then take the expectation over that. This measures the "average squared deviation from the mean," or how *variable* the data are around the mean.
+
+The variance can be rewritten in a nicer way.
+
+<div class="callout proposition">
+<div class="label">Proposition: Moment Representation of Variance</div>
+
+Let $X$ be a random variable. Then the variance of $X$ can be written
+
+$$
+\operatorname{Var}(X) = \mathbb E[X^2] - \left(\mathbb E[X]\right)^2.
+$$
+
+</div>
+
+This form is often easier to compute, because it's easier to calculate $\mathbb E[X^2]$ and $\mathbb E[X]$ separately from the formula than it is to compute the expectation of the random variable $(X - \mathbb E[X])^2$. Specifically, the formula would be
+
+$$
+\operatorname{Var}(X) = \sum_{x \in \mathcal X} p(x) \cdot x^2 - \left(\sum_{x \in \mathcal X} p(x) \cdot x\right)^2.
+$$
+
+We now present the variance analog of linearity of expectation&mdash;the variance is *not* linear.
+
+<div class="callout proposition">
+<div class="label">Proposition: Variance of a Linear Transformation</div>
+
+Let $X$ be a random variable, and let $a, b \in \mathbb R$ be constants. Then
+
+$$
+\operatorname{Var}(aX + b) = a^2 \operatorname{Var}(X).
+$$
+
+</div>
+
+<!--
+<details class="collapsible">
+<summary>Proof</summary>
+<div class="collapsible__content">
+
+We have that
+
+$$
+\operatorname{Var}(aX + b) = \mathbb E[(aX + b)^2] - (\mathbb E[aX+b])^2 = \mathbb E[a^2X^2 + 2abX + b^2] - (\mathbb E[aX + b])^2
+$$
+
+</div>
+</details>
+
+-->
+
+To find the standard deviation for the linear transformation of a random variable, we can directly apply the variance result and take the square root.
+
+<div class="callout proposition">
+<div class="label">Proposition: Standard Deviation of a Linear Transformation</div>
+
+Let $X$ be a random variable, and let $a, b \in \mathbb R$ be constants. Then
+
+$$
+\operatorname{SD}(aX + b) = |a| \operatorname{SD}(X).
+$$
+
+</div>
+
+<details class="collapsible">
+<summary>Proof</summary>
+<div class="collapsible__content">
+
+We have that
+
+$$
+\operatorname{SD}(aX + b) = \sqrt{\operatorname{Var}(aX + b)} = \sqrt{a^2 \operatorname{Var}(X)} = |a| \sqrt{\operatorname{Var}(X)} = |a| \operatorname{SD}(X).
+$$
+
+</div>
+</details>
+
 
 
 
