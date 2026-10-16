@@ -408,6 +408,8 @@ Suppose I have a random variable $X$ that is normally distributed with mean 5 an
   <li>Do the strict/nonstrict inequalities matter here?</li>
 </ol>
 
+*Hint: we can think of calculating the probabilities $\mathbb P(X > x)$ and $\mathbb P(X < x)$ by checking how many standard deviations $x$ is from the mean, and then asking ourselves what the probability is that $X$ is that far away.*
+
 </div>
 
 <details class="collapsible">
