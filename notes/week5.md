@@ -892,6 +892,7 @@ Let's do some visualization for conditional pdfs.
 
 First, let us look at a bivariate Gaussian distribution. This means that $X$ and $Y$ are jointly Gaussian. Suppose that $X$ and $Y$ are independent. What does this say about the correlation $\rho := \operatorname{Corr}(X, Y)$?
 
+<a id="conditionals-visualization"></a>
 <div class="bivariate-normal-slicer"
      data-instance-id="week5-bivariate-normal-uncorrelated-axis-v2"
      data-title="Conditional PDFs for an Uncorrelated Bivariate Gaussian"
