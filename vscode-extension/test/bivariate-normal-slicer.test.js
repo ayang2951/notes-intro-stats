@@ -265,6 +265,7 @@ test('both the website and live preview load the interactive module', () => {
   assert.match(weekFive, /data-initial-conditional-y-maximum="0\.62"/);
   assert.match(weekFive, /data-title="Conditional PDFs for an Uncorrelated Bivariate Gaussian"/);
   assert.match(weekFive, /data-correlation="0"/);
+  assert.match(weekFive, /data-shared-side-plot-scale="true"/);
   assert.match(weekFive, /data-initial-joint-y-maximum="0\.1"/);
   assert.match(weekFive, /data-initial-conditional-y-maximum="0\.5"/);
   assert.match(weekFive, /data-title="Conditional PDFs for a Multimodal Joint Distribution"/);
@@ -317,6 +318,12 @@ test('the slicer presents one 3D control and two independently zoomable density 
   assert.match(slicerSource, /const yMaximum = baseYMaximum \/ this\.state\.zoom\[kind\]/);
   assert.match(slicerSource, /this\.model\.conditionalPeakDensityY\(fixedValue\)/);
   assert.match(slicerSource, /this\.model\.conditionalPeakDensityX\(fixedValue\)/);
+  assert.match(slicerSource, /root\.dataset\.sharedSidePlotScale === "true"/);
+  assert.match(slicerSource, /this\.sharedSideDomain = \[/);
+  assert.match(slicerSource, /expandedDomain\(this\.sharedSideDomain, 1 \/ this\.state\.zoom\[kind\]\)/);
+  assert.match(slicerSource, /this\.model\.marginalDensityX\(fixedValue\) \* conditionalPeakDensity/);
+  assert.match(slicerSource, /this\.model\.marginalDensityY\(fixedValue\) \* conditionalPeakDensity/);
+  assert.match(slicerSource, /this\.shareSidePlotScale \? jointSlicePeakDensity : this\.model\.peakDensity/);
   assert.match(slicerSource, /numberFromData\(root, "initialJointYMaximum", NaN\)/);
   assert.match(slicerSource, /"initialJointZoom"/);
   assert.match(slicerSource, /automaticJointYMaximum \/ requestedJointYMaximum/);

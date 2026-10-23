@@ -894,13 +894,14 @@ First, let us look at a bivariate Gaussian distribution. This means that $X$ and
 
 <a id="conditionals-visualization"></a>
 <div class="bivariate-normal-slicer"
-     data-instance-id="week5-bivariate-normal-uncorrelated-axis-v2"
+     data-instance-id="week5-bivariate-normal-uncorrelated-axis-v3"
      data-title="Conditional PDFs for an Uncorrelated Bivariate Gaussian"
      data-mean-x="0"
      data-mean-y="0"
      data-variance-x="4"
      data-variance-y="1"
      data-correlation="0"
+     data-shared-side-plot-scale="true"
      data-initial-joint-y-maximum="0.1"
      data-initial-conditional-y-maximum="0.5">
   <p class="bns-fallback">Loading the interactive bivariate Gaussian model...</p>

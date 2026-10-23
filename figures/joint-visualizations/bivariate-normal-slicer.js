@@ -26,6 +26,12 @@ function formatNumber(value, digits = 2) {
   return rounded.toFixed(digits);
 }
 
+function densityTickDigits(maximum) {
+  if (maximum >= 0.1) return 2;
+  if (maximum >= 0.01) return 3;
+  return 4;
+}
+
 function range(start, end, count) {
   if (count <= 1) return [start];
   return Array.from({ length: count }, (_value, index) =>
@@ -70,6 +76,7 @@ class BivariateNormalSlicer {
     this.displayTitle = root.dataset.title?.trim() || "Interactive joint density";
     this.instanceKey = root.dataset.instanceId || `bivariate-normal-${++instanceCounter}`;
     this.showParameterLegend = root.dataset.showParameterLegend !== "false";
+    this.shareSidePlotScale = root.dataset.sharedSidePlotScale === "true";
     this.model = this.distribution === "multimodal"
       ? createMultimodalJointDensity()
       : createBivariateNormal({
@@ -92,6 +99,10 @@ class BivariateNormalSlicer {
     this.displayCenterY = finiteStateValue(this.model.displayCenterY, this.model.meanY);
     this.gridXDomain = expandedDomain(this.xDomain, 2);
     this.gridYDomain = expandedDomain(this.yDomain, 2);
+    this.sharedSideDomain = [
+      Math.min(this.xDomain[0], this.yDomain[0]),
+      Math.max(this.xDomain[1], this.yDomain[1])
+    ];
     this.worldDepthScale = (this.xDomain[1] - this.xDomain[0]) /
       (this.yDomain[1] - this.yDomain[0]) * 0.8;
     this.worldHeight = 4.8;
@@ -655,12 +666,17 @@ class BivariateNormalSlicer {
     const fixedValue = this.state.values[mode];
     const varyingVariable = mode === "x" ? "Y" : "X";
     const fixedVariable = mode === "x" ? "X" : "Y";
-    const unconditionalMean = mode === "x" ? this.model.meanY : this.model.meanX;
-    const baseStandardDeviation = mode === "x"
-      ? this.model.standardDeviationY
-      : this.model.standardDeviationX;
-    const halfWidth = 3 * baseStandardDeviation / this.state.zoom[kind];
-    const domain = [unconditionalMean - halfWidth, unconditionalMean + halfWidth];
+    let domain;
+    if (this.shareSidePlotScale) {
+      domain = expandedDomain(this.sharedSideDomain, 1 / this.state.zoom[kind]);
+    } else {
+      const unconditionalMean = mode === "x" ? this.model.meanY : this.model.meanX;
+      const baseStandardDeviation = mode === "x"
+        ? this.model.standardDeviationY
+        : this.model.standardDeviationX;
+      const halfWidth = 3 * baseStandardDeviation / this.state.zoom[kind];
+      domain = [unconditionalMean - halfWidth, unconditionalMean + halfWidth];
+    }
     const values = range(domain[0], domain[1], 201);
     const density = mode === "x"
       ? kind === "joint"
@@ -670,11 +686,15 @@ class BivariateNormalSlicer {
         ? (coordinate) => this.model.jointDensity(coordinate, fixedValue)
         : (coordinate) => this.model.conditionalDensityX(coordinate, fixedValue);
     const points = values.map((coordinate) => [coordinate, density(coordinate)]);
-    const baseYMaximum = kind === "joint"
-      ? 1.08 * this.model.peakDensity
-      : 1.08 * (mode === "x"
-          ? this.model.conditionalPeakDensityY(fixedValue)
-          : this.model.conditionalPeakDensityX(fixedValue));
+    const conditionalPeakDensity = mode === "x"
+      ? this.model.conditionalPeakDensityY(fixedValue)
+      : this.model.conditionalPeakDensityX(fixedValue);
+    const jointSlicePeakDensity = mode === "x"
+      ? this.model.marginalDensityX(fixedValue) * conditionalPeakDensity
+      : this.model.marginalDensityY(fixedValue) * conditionalPeakDensity;
+    const baseYMaximum = 1.08 * (kind === "joint"
+      ? this.shareSidePlotScale ? jointSlicePeakDensity : this.model.peakDensity
+      : conditionalPeakDensity);
     const yMaximum = baseYMaximum / this.state.zoom[kind];
     const xScale = (value) => margin.left +
       (value - domain[0]) / (domain[1] - domain[0]) * plotWidth;
@@ -728,6 +748,7 @@ class BivariateNormalSlicer {
       }, formatNumber(tick, this.state.zoom[kind] >= 3 ? 2 : 1)));
     });
 
+    const yTickDigits = densityTickDigits(yMaximum);
     range(0, yMaximum, 4).forEach((tick) => {
       const y = yScale(tick);
       svg.appendChild(svgElement("line", {
@@ -742,7 +763,7 @@ class BivariateNormalSlicer {
         x: margin.left - 8,
         y: y + 4,
         "text-anchor": "end"
-      }, tick.toFixed(2)));
+      }, tick.toFixed(yTickDigits)));
     });
 
     const linePath = points.map(([coordinate, densityValue], index) =>
