@@ -2,7 +2,7 @@
   "name": "course-notes-preview",
   "displayName": "Course Notes Preview",
   "description": "A live, side-by-side preview for math-heavy Markdown course notes.",
-  "version": "0.6.3",
+  "version": "0.8.1",
   "publisher": "local-notes",
   "license": "MIT",
   "engines": {
@@ -103,9 +103,9 @@
     }
   },
   "scripts": {
-    "check": "node --check media/html-markdown.js && node --check src/extension.js && node --check media/source-navigation.js && node --check media/equation-numbering.js && node --check media/equation-reference-index.js && node --check media/code-blocks.js && node --check media/preview.js && node --test test/*.test.js",
-    "package": "vsce package --out course-notes-preview-0.6.3.vsix",
-    "install:local": "code --install-extension course-notes-preview-0.6.3.vsix --force"
+    "check": "node --check media/html-markdown.js && node --check src/extension.js && node --check media/source-navigation.js && node --check media/equation-numbering.js && node --check media/equation-reference-index.js && node --check media/code-blocks.js && node --check media/preview.js && node --check ../figures/joint-visualizations/bivariate-normal-loader.js && node --check ../figures/joint-visualizations/bivariate-normal-math.js && node --check ../figures/joint-visualizations/bivariate-normal-slicer.js && node --check ../figures/joint-visualizations/vendor/three.module.js && node --check ../figures/joint-visualizations/vendor/three.core.js && node --check ../figures/joint-visualizations/vendor/OrbitControls.js && node --test test/*.test.js",
+    "package": "vsce package --out course-notes-preview-0.8.1.vsix",
+    "install:local": "code --install-extension course-notes-preview-0.8.1.vsix --force"
   },
   "devDependencies": {
     "marked": "18.0.11",

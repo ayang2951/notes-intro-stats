@@ -7,10 +7,12 @@ const {
   equationReferenceRecords
 } = require('../media/equation-reference-index');
 const { resolveSourceMatch } = require('../media/source-navigation');
+const { scheduleMathErrorRetry } = require('./render-retry');
 
 const CONFIG_SECTION = 'courseNotesPreview';
 const VIEW_TYPE = 'courseNotesPreview.preview';
 const DEFAULT_UPDATE_DELAY = 120;
+const MATH_ERROR_RETRY_DELAY = 300;
 const MAX_SELECTED_TEXT_LENGTH = 256;
 const MAX_CODE_COPY_LENGTH = 5_000_000;
 
@@ -278,9 +280,18 @@ class PreviewController {
       return;
     }
 
+    if (message.type === 'retryRender') {
+      this.retryRender(message);
+      return;
+    }
+
     if (message.type === 'copyCode') {
       await this.copyCode(message);
     }
+  }
+
+  retryRender(message) {
+    scheduleMathErrorRetry(this, message, MATH_ERROR_RETRY_DELAY);
   }
 
   onEditorSelectionChanged(event) {
@@ -624,6 +635,17 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   const previewScriptUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'preview.js')
   );
+  const bivariateNormalLoaderScriptUri = workspaceFolder
+    ? webview.asWebviewUri(vscode.Uri.joinPath(
+      workspaceFolder.uri,
+      'figures',
+      'joint-visualizations',
+      'bivariate-normal-loader.js'
+    ))
+    : undefined;
+  const bivariateNormalLoaderScriptTag = bivariateNormalLoaderScriptUri
+    ? `<script nonce="${nonce}" type="module" src="${bivariateNormalLoaderScriptUri}"></script>`
+    : '';
   const sourceNavigationScriptUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'source-navigation.js')
   );
@@ -681,6 +703,7 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   <script nonce="${nonce}" defer src="${equationNumberingScriptUri}"></script>
   <script nonce="${nonce}" defer src="${codeBlocksScriptUri}"></script>
   <script nonce="${nonce}" defer src="${htmlMarkdownScriptUri}"></script>
+  ${bivariateNormalLoaderScriptTag}
   <script nonce="${nonce}" defer src="${previewScriptUri}"></script>
 </head>
 <body>

@@ -4,5 +4,9 @@
     "notes/week2.md",
     "notes/week3.md",
     "notes/week4.md"
+  ],
+  "courseNotesPreview.workspaceCssFiles": [
+    "styles.css",
+    "figures/joint-visualizations/bivariate-normal-slicer.css"
   ]
 }

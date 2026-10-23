@@ -66,6 +66,7 @@
   let anchorHighlightTimer;
   let referenceTargets = new Map();
   let copyRequestCounter = 0;
+  let lastMathErrorRetryKey = "";
   const pendingCodeCopies = new Map();
 
   const MATH_CHARACTER_PLACEHOLDER = /COURSECNOTESPROTECTEDTEXCHAR(\d+)X/g;
@@ -301,13 +302,25 @@
   }
 
   async function drainRenderQueue() {
+    if (rendering) return;
     rendering = true;
-    while (pendingRender) {
-      const message = pendingRender;
-      pendingRender = undefined;
-      await render(message);
+
+    try {
+      while (pendingRender) {
+        const message = pendingRender;
+        pendingRender = undefined;
+
+        try {
+          await render(message);
+        } catch (error) {
+          console.error(error);
+          showStatus(`Preview failed: ${error.message || error}`, true);
+        }
+      }
+    } finally {
+      rendering = false;
+      if (pendingRender) void drainRenderQueue();
     }
-    rendering = false;
   }
 
   async function render(message) {
@@ -350,11 +363,17 @@
 
       restoreDetailStates(detailStates);
       await typesetMath();
+      const hasMathErrors = containsMathError(content);
       connectAlignedEquationRows();
       referenceTargets = buildReferenceRegistry(referenceClaims);
       mergeProjectEquationReferences(referenceTargets, current.projectReferences);
       resolveCrossReferences(referenceTargets);
-      hideStatus();
+      if (hasMathErrors) {
+        requestMathErrorRetry(message);
+      } else {
+        lastMathErrorRetryKey = "";
+        hideStatus();
+      }
       restoreViewportAnchor(previousAnchor);
       persistState();
     } catch (error) {
@@ -387,6 +406,27 @@
     if (typeof window.MathJax.typesetPromise === "function") {
       await window.MathJax.typesetPromise([content]);
     }
+  }
+
+  function containsMathError(root) {
+    return Boolean(root.querySelector("[data-mjx-error]"));
+  }
+
+  function requestMathErrorRetry(message) {
+    const retryKey = `${message.uri}\u0000${message.version}\u0000${hashText(message.markdown)}`;
+    if (retryKey === lastMathErrorRetryKey) {
+      showStatus("Some math could not be displayed. Check the formula or refresh the preview.", true);
+      return;
+    }
+
+    lastMathErrorRetryKey = retryKey;
+    showStatus("Checking the math again…", false);
+    vscode.postMessage({
+      type: "retryRender",
+      uri: message.uri,
+      version: message.version,
+      renderRevision: message.renderRevision
+    });
   }
 
   function autoNumberCallouts() {
@@ -1478,6 +1518,7 @@
   }
 
   function showStatus(message, isError) {
+    content.setAttribute("aria-busy", isError ? "false" : "true");
     status.textContent = message;
     status.classList.toggle("is-error", Boolean(isError));
     status.hidden = false;

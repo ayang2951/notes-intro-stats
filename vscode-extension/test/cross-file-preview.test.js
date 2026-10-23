@@ -41,3 +41,10 @@ test('changes in any configured note refresh every related preview', () => {
   assert.match(extensionSource, /controller\.usesConfiguredNote\(event\.document\.uri\)/);
   assert.match(extensionSource, /createFileSystemWatcher\('\*\*\/\*\.md'\)/);
 });
+
+test('a MathJax error requests one fresh render of the current revision', () => {
+  assert.match(previewSource, /containsMathError\(content\)/);
+  assert.match(previewSource, /type: "retryRender",\s+uri: message\.uri,\s+version: message\.version,\s+renderRevision: message\.renderRevision/);
+  assert.match(extensionSource, /if \(message\.type === 'retryRender'\)/);
+  assert.match(extensionSource, /scheduleMathErrorRetry\(this, message, MATH_ERROR_RETRY_DELAY\)/);
+});
