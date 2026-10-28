@@ -520,7 +520,7 @@ $$
 The inequality holds because the function we are taking the expectation over is a square and hence must be nonnegative. Expanding out gives
 
 $$
-\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} - \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{{\operatorname{Var}(X)}}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{{\operatorname{Var}(Y)}}\right] - 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0.
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} - \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{\operatorname{Var}(X)}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{\operatorname{Var}(Y)}\right] - 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0.
 $$
 
 Simplifying, we have that the first two terms are one, and moving the last term to the other side of the inequality and dividing by two gives
@@ -538,7 +538,7 @@ $$
 Expanding, we obtain 
 
 $$
-\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} + \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{{\operatorname{Var}(X)}}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{{\operatorname{Var}(Y)}}\right] + 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0,
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} + \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{\operatorname{Var}(X)}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{\operatorname{Var}(Y)}\right] + 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0,
 $$
 
 which simplifies to 
