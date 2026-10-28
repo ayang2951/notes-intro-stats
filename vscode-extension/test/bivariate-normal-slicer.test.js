@@ -273,6 +273,7 @@ test('both the website and live preview load the interactive module', () => {
   assert.match(weekFive, /data-title="Conditional PDFs for a Multimodal Joint Distribution"/);
   assert.match(weekFive, /data-distribution="multimodal"/);
   assert.match(weekFive, /data-initial-joint-zoom="1\.2"/);
+  assert.match(weekFive, /data-fixed-conditional-y-maximum="0\.96"/);
   assert.match(weekFive, /data-show-parameter-legend="false"/);
   assert.match(orbitControls, /from '\.\/three\.module\.js'/);
   assert.match(threeModule, /from '\.\/three\.core\.js'/);
@@ -337,6 +338,11 @@ test('the slicer presents one 3D control and two independently zoomable density 
   assert.match(slicerSource, /removeEventListener\("wheel", this\.onPlotWheel\)/);
   assert.match(slicerSource, /addEventListener\("pointerdown", this\.onRangePointerDown\)/);
   assert.match(slicerSource, /removeEventListener\("pointerdown", this\.onRangePointerDown\)/);
+  assert.match(
+    slicerSource,
+    /this\.fixedConditionalYMaximum = numberFromData\(\s*root,\s*"fixedConditionalYMaximum",\s*NaN\s*\)/
+  );
+  assert.match(slicerSource, /const conditionalYMaximum = this\.fixedConditionalYMaximum > 0/);
   assert.match(slicerSource, /const yMaximum = baseYMaximum \/ this\.state\.zoom\[kind\]/);
   assert.match(slicerSource, /this\.model\.conditionalPeakDensityY\(fixedValue\)/);
   assert.match(slicerSource, /this\.model\.conditionalPeakDensityX\(fixedValue\)/);
@@ -349,7 +355,7 @@ test('the slicer presents one 3D control and two independently zoomable density 
   );
   assert.match(
     slicerSource,
-    /const baseYMaximum = 1\.08 \* \(kind === "joint"[\s\S]*?this\.model\.peakDensity/
+    /const baseYMaximum = kind === "joint"[\s\S]*?1\.08 \* this\.model\.peakDensity[\s\S]*?: conditionalYMaximum/
   );
   assert.doesNotMatch(slicerSource, /jointSlicePeakDensity/);
   assert.match(rangeInputHandler, /scheduleSliceUpdate/);

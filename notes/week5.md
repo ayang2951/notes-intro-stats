@@ -983,6 +983,7 @@ This example has a density that exhibits multiple modes. Does the conditional de
      data-title="Conditional PDFs for a Multimodal Joint Distribution"
      data-distribution="multimodal"
      data-initial-joint-zoom="1.2"
+     data-fixed-conditional-y-maximum="0.96"
      data-show-parameter-legend="false">
   <p class="bns-fallback">Loading the interactive multimodal joint-density model...</p>
 </div>

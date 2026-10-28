@@ -120,6 +120,11 @@ class BivariateNormalSlicer {
       "initialConditionalYMaximum",
       NaN
     );
+    this.fixedConditionalYMaximum = numberFromData(
+      root,
+      "fixedConditionalYMaximum",
+      NaN
+    );
     const automaticJointYMaximum = 1.08 * this.model.peakDensity;
     const automaticConditionalYMaximum = 1.08 *
       this.model.conditionalPeakDensityY(initialSliceX);
@@ -710,9 +715,12 @@ class BivariateNormalSlicer {
     const conditionalPeakDensity = mode === "x"
       ? this.model.conditionalPeakDensityY(fixedValue)
       : this.model.conditionalPeakDensityX(fixedValue);
-    const baseYMaximum = 1.08 * (kind === "joint"
-      ? this.model.peakDensity
-      : conditionalPeakDensity);
+    const conditionalYMaximum = this.fixedConditionalYMaximum > 0
+      ? this.fixedConditionalYMaximum
+      : 1.08 * conditionalPeakDensity;
+    const baseYMaximum = kind === "joint"
+      ? 1.08 * this.model.peakDensity
+      : conditionalYMaximum;
     const yMaximum = baseYMaximum / this.state.zoom[kind];
     const xScale = (value) => margin.left +
       (value - domain[0]) / (domain[1] - domain[0]) * plotWidth;
