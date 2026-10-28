@@ -1,8 +1,8 @@
-<div class="solution-visibility" data-show-solutions="false"></div>
+<div class="solution-visibility" data-show-solutions="true"></div>
 
 ## Joint Distributions
 
-A joint distribution describes how two random variables behave together.
+A joint distribution describes how two random variables behave together. For example, for two random variables, are they likely to both be large together? Or is it more likely that one is large and one is small? Or is knowing the value of one completely unhelpful in getting probabilities for the other?
 
 ### Discrete Joint Distributions
 
@@ -17,7 +17,7 @@ $$
 
 </div>
 
-A valid joint pmf must satisfy:
+A valid joint pmf must satisfy the following two properties:
 
 <ol type="i">
   <li>Nonnegative probability for all values in the domain:
@@ -268,105 +268,6 @@ provided this value is finite.
 </div>
 
 
-<!--
-<div class="callout example">
-<div class="label">Example: A Joint PDF on a Triangle</div>
-
-Suppose the joint pdf of $X$ and $Y$ has the form
-
-$$
-f_{X,Y}(x, y)
-=
-\begin{cases}
-c, & 0 < y < x < 1, \\
-0, & \text{otherwise}.
-\end{cases}
-$$
-
-<ol type="i">
-  <li>Find $c$.</li>
-  <li>Find the marginal pdfs $f_X$ and $f_Y$.</li>
-  <li>Verify that both marginal pdfs integrate to one.</li>
-  <li>Find $\mathbb P(Y < X/2)$.</li>
-  <li>Find $F_{X,Y}(3/4, 1/2)$.</li>
-</ol>
-
-</div>
-
-<details class="collapsible">
-<summary>Solution</summary>
-<div class="collapsible__content">
-
-<ol type="i">
-  <li>The joint density must integrate to one. Therefore,
-
-  $$
-  1
-  = \int_0^1 \int_0^x c \, \mathrm dy \, \mathrm dx
-  = \int_0^1 cx \, \mathrm dx
-  = \frac{c}{2},
-  $$
-
-  so $c = 2$.
-  </li>
-  <li>For $0 < x < 1$,
-
-  $$
-  f_X(x)
-  = \int_0^x 2 \, \mathrm dy
-  = 2x.
-  $$
-
-  For $0 < y < 1$, the restriction $y < x < 1$ gives
-
-  $$
-  f_Y(y)
-  = \int_y^1 2 \, \mathrm dx
-  = 2(1-y).
-  $$
-
-  Both marginal densities are zero outside $(0, 1)$.
-  </li>
-  <li>We have
-
-  $$
-  \int_0^1 2x \, \mathrm dx = 1
-  $$
-
-  and
-
-  $$
-  \int_0^1 2(1-y) \, \mathrm dy = 1.
-  $$
-  </li>
-  <li>The event $Y < X/2$ lies inside the triangular support, so
-
-  $$
-  \mathbb P(Y < X/2)
-  = \int_0^1 \int_0^{x/2} 2 \, \mathrm dy \, \mathrm dx
-  = \int_0^1 x \, \mathrm dx
-  = \frac{1}{2}.
-  $$
-  </li>
-  <li>For $0 < x \leq 1/2$, the upper bound for $y$ is $x$. For $1/2 < x \leq 3/4$, the upper bound is $1/2$. Thus,
-
-  $$
-  \begin{split}
-  F_{X,Y}(3/4, 1/2)
-  & = \int_0^{1/2} \int_0^x 2 \, \mathrm dy \, \mathrm dx
-  +\int_{1/2}^{3/4} \int_0^{1/2} 2 \, \mathrm dy \, \mathrm dx\\
-  & = \frac{1}{4}+\frac{1}{4}
-  = \frac{1}{2}.
-  \end{split}
-  $$
-  </li>
-</ol>
-
-</div>
-</details>
-
--->
-
 
 ## Independence, Covariance, and Correlation
 
@@ -539,6 +440,153 @@ x\cdot y \cdot f_{X, Y}(x, y)\,\mathrm dx\,\mathrm dy - \left(\int_{-\infty}^\in
 $$
 
 How do we interpret covariance? From the definition, we're weighting the product $(x - \mathbb E[X])(y - \mathbb E[Y])$ by its probability or density. Let's think about the *sign* of the covariance first. If it's positive, we see that $(x - \mathbb E[X])$ and $(y - \mathbb E[Y])$ have the same sign on average&mdash;together, they're more likely to be both large or both small.
+
+The covariance has a few important properties.
+
+<div class="callout proposition">
+<div class="label">Proposition: Properties of Covariance</div>
+
+Let $X, Y$ be two random variables with nonzero variances.
+
+<ol type="i">
+
+<li>The covariance of linear transformations $a_1X + b_1$ and $a_2 Y + b_2$ satisfies
+
+$$
+\operatorname{Cov}(a_1 X + b_1, a_2 X + b_2) = a_1 \cdot a_2 \operatorname{Cov}(X, Y).
+$$
+</li>
+
+<li>The covariance satisfies the following inequality:
+
+$$
+\left|\operatorname{Cov}(X, Y)\right| \leq \sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}.
+$$
+</li>
+
+<li>
+The covariance satisfies
+
+$$
+\operatorname{Cov}(X,Y)
+=
+\frac12 \bigg({\operatorname{Var}(X+Y)-\operatorname{Var}(X)-\operatorname{Var}(Y)}\bigg).
+$$
+</li>
+</ol>
+
+</div>
+
+<details class="collapsible">
+<summary>Proof</summary>
+<div class="collapsible__content">
+
+We prove the propositions above.
+
+<ol type="i">
+
+<li>
+We use the simplified formula for covariance. Consider first only scaling $X$.
+
+$$
+\operatorname{Cov}(a_1X, Y) \overset{(1)}= \mathbb E[(a_1 X)Y] - \mathbb E[a_1X]\mathbb E[Y] \overset{(2)}= a_1\mathbb E[XY] - a_1 \mathbb E[X]\mathbb E[Y] \overset{(3)}= a_1\operatorname{Cov}(X, Y).
+$$
+
+Equality $(1)$ follows by definition of covariance, equation $(2)$ follows by linearity of expectation presented in [Proposition](#proposition:linearity-of-expectation). Equation $(3)$ factors $a_1$ out of the original covariance $\operatorname{Cov}(X, Y)$.
+
+Next, let's consider only shifting $X$.
+
+$$
+\operatorname{Cov}(X + b_1, Y) \overset{(1)}= \mathbb E[(X - b_1)Y] - \mathbb E[X - b_1]\mathbb E[Y] \overset{(2)}= \mathbb E[XY] - \mathbb E[b_1 Y] - \mathbb E[X]\mathbb E[Y] + \mathbb E[b_1Y] \overset{(3)}= \mathbb E[XY] - \mathbb E[X]\mathbb E[Y].
+$$
+
+Again, step $(1)$ is by definition, step $(2)$ distributes over $Y$, and step $(3)$ cancels the terms $b_1\mathbb E[Y]$ and $-b_1\mathbb E[Y]$.
+
+Combining, we have
+
+$$
+\operatorname{Cov}(a_1X + b_1, a_2Y + b_2) = \operatorname{Cov}(a_1X, a_2Y + b_2) = a_1\operatorname{Cov}(X, a_2Y + b_2) = a_1\operatorname{Cov}(X, a_2Y) = a_1\cdot a_1 \operatorname{Cov}(X, Y).
+$$
+</li>
+
+<li>We'll have to use a clever trick to prove this statement.
+
+First, consider the expectation
+
+$$
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} - \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] \geq 0.
+$$
+
+The inequality holds because the function we are taking the expectation over is a square and hence must be nonnegative. Expanding out gives
+
+$$
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} - \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{{\operatorname{Var}(X)}}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{{\operatorname{Var}(Y)}}\right] - 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0.
+$$
+
+Simplifying, we have that the first two terms are one, and moving the last term to the other side of the inequality and dividing by two gives
+
+$$
+\frac{\operatorname{Cov}(X, Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}} \leq 1.
+$$
+
+Now, consider expectation 
+
+$$
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} + \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] \geq 0.
+$$
+
+Expanding, we obtain 
+
+$$
+\mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}} + \frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)^2\right] = \mathbb E\left[\frac{(X - \mathbb E[X])^2}{{\operatorname{Var}(X)}}\right] + \mathbb E\left[\frac{(Y - \mathbb E[Y])^2}{{\operatorname{Var}(Y)}}\right] + 2 \cdot \mathbb E\left[\left(\frac{X - \mathbb E[X]}{\sqrt{\operatorname{Var}(X)}}\right)\left(\frac{Y - \mathbb E[Y]}{\sqrt{\operatorname{Var}(Y)}}\right)\right] \geq 0,
+$$
+
+which simplifies to 
+
+$$
+-\frac{\operatorname{Cov}(X, Y)}{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}} \leq 1.
+$$
+
+Combining these inequalities, we have that
+
+$$
+{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}} \leq {\operatorname{Cov}(X, Y)} \leq -{\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}},
+$$
+
+finally giving the desired inequality,
+
+$$
+|\operatorname{Cov}(X, Y)| \leq {\sqrt{\operatorname{Var}(X)\operatorname{Var}(Y)}}.
+$$
+</li>
+
+<li>
+
+By the definitions of variance and covariance,
+
+$$
+\begin{aligned}
+\operatorname{Var}(X+Y) =  \mathbb E[(X + Y - \mathbb E[X + Y])^2]
+&= \mathbb E\left[\left((X-\mathbb E[X])+(Y-\mathbb E[Y])\right)^2\right] = \operatorname{Var}(X)+\operatorname{Var}(Y)
+   +2\operatorname{Cov}(X,Y).
+\end{aligned}
+$$
+
+Therefore,
+
+$$
+\operatorname{Cov}(X,Y)
+=
+\frac12 \bigg({\operatorname{Var}(X+Y)-\operatorname{Var}(X)-\operatorname{Var}(Y)}\bigg).
+$$
+</li>
+
+</ol>
+
+</div>
+</details>
+
+
 
 However, we note that the magnitude of the covariance is not as easy to interpret if we only care about the relationship between these two variables. To communicate only the information about how related these two variables are with one another, we introduce the *correlation*.
 

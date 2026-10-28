@@ -571,6 +571,7 @@ The expectation can also be understood physically: it is the *center of mass* or
 
 The expectation has several important properties.
 
+<a id="proposition:linearity-of-expectation"></a>
 <div class="callout proposition">
 <div class="label">Proposition: Linearity of Expectation</div>
 

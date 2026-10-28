@@ -25,16 +25,25 @@ test('ordinary TeX equation labels are numbered on the site and in the preview',
 
 test('render messages carry the project index and a separate render revision', () => {
   assert.match(extensionSource, /renderRevision: generation/);
-  assert.match(extensionSource, /projectReferences: equationReferenceRecords\(referenceIndex\)/);
-  assert.match(previewSource, /mergeProjectEquationReferences\(referenceTargets, current\.projectReferences\)/);
+  assert.match(extensionSource, /projectReferences: projectReferenceRecords\(referenceIndex\)/);
+  assert.match(previewSource, /mergeProjectReferences\(referenceTargets, current\.projectReferences\)/);
   assert.match(previewSource, /message\.renderRevision <= newestRevision/);
 });
 
 test('cross-file links send only their ID and are resolved again by the extension', () => {
   assert.match(previewSource, /type: "revealReference",\s+id,\s+renderRevision:/);
   assert.doesNotMatch(previewSource, /type: "revealReference",\s+(?:uri|line|character):/);
-  assert.match(extensionSource, /index = await this\.buildProjectEquationIndex/);
+  assert.match(extensionSource, /index = await this\.buildProjectReferenceIndex/);
   assert.match(extensionSource, /document\.getText\(range\) !== message\.id/);
+  assert.match(extensionSource, /target\.targetLine \?\? target\.equationLine \?\? target\.line/);
+});
+
+test('callout records follow the callout-numbering setting', () => {
+  assert.match(
+    extensionSource,
+    /includeCallouts: configuration\.get\('autoNumberCallouts', true\)/
+  );
+  assert.match(previewSource, /callout\.closest\("pre, code"\)/);
 });
 
 test('changes in any configured note refresh every related preview', () => {

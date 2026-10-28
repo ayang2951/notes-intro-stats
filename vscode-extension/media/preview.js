@@ -46,6 +46,7 @@
   const sourceNavigation = window.CourseNotesSourceNavigation;
   const equationNumbering = window.CourseNotesEquationNumbering;
   const codeBlocks = window.CourseNotesCodeBlocks;
+  const interactiveComponents = window.CourseNotesInteractiveComponents;
 
   let current = {
     uri: "",
@@ -324,6 +325,7 @@
   }
 
   async function render(message) {
+    const previous = current;
     const previousAnchor = current.version >= 0
       ? captureViewportAnchor()
       : savedAnchorFor(message.uri);
@@ -343,13 +345,20 @@
 
     content.setAttribute("aria-busy", "true");
     showStatus("Updating preview…", false);
-    workspaceStyle.textContent = current.cssText;
+    if (workspaceStyle.textContent !== current.cssText) {
+      workspaceStyle.textContent = current.cssText;
+    }
 
     try {
       clearMathTypesetting();
       clearPendingCodeCopies();
       const html = renderMarkdown(current.markdown);
-      content.innerHTML = `<section class="note-section" data-sec="${current.sectionNumber}">${html}</section>`;
+      const nextContent = document.createElement("article");
+      nextContent.innerHTML = `<section class="note-section" data-sec="${current.sectionNumber}">${html}</section>`;
+      interactiveComponents?.reuseInitializedComponents(content, nextContent, {
+        enabled: previous.uri === current.uri && previous.cssText === current.cssText
+      });
+      content.replaceChildren(...Array.from(nextContent.childNodes));
       window.CourseNotesHtmlMarkdown.normalizeParagraphs(content);
       if (typeof window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles === "function") {
         window.CourseNotesHtmlMarkdown.classifySolutionCollapsibles(content);
@@ -366,7 +375,7 @@
       const hasMathErrors = containsMathError(content);
       connectAlignedEquationRows();
       referenceTargets = buildReferenceRegistry(referenceClaims);
-      mergeProjectEquationReferences(referenceTargets, current.projectReferences);
+      mergeProjectReferences(referenceTargets, current.projectReferences);
       resolveCrossReferences(referenceTargets);
       if (hasMathErrors) {
         requestMathErrorRetry(message);
@@ -434,6 +443,7 @@
     const claims = [];
 
     content.querySelectorAll(".callout").forEach((callout) => {
+      if (callout.closest("pre, code")) return;
       const type = CALLOUT_TYPES.find((candidate) => callout.classList.contains(candidate));
       if (!type) return;
 
@@ -915,7 +925,7 @@
     return registry;
   }
 
-  function mergeProjectEquationReferences(registry, records) {
+  function mergeProjectReferences(registry, records) {
     const groups = groupById(records.filter(isProjectReferenceRecord));
 
     groups.forEach((group, id) => {

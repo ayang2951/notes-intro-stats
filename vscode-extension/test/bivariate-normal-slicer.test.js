@@ -117,6 +117,8 @@ test('the uncorrelated Gaussian has fixed conditional densities', async () => {
   assert.ok(Math.abs(
     model.jointDensity(1.2, -0.4) - model.marginalDensityX(1.2) * model.marginalDensityY(-0.4)
   ) < 1e-14);
+  assert.ok(model.jointDensity(2, 0) < model.jointDensity(0, 0));
+  assert.ok(model.jointDensity(0, 1) < model.jointDensity(0, 0));
 });
 
 test('the requested Gaussian side-plot maxima determine proportional initial zoom', async () => {
@@ -288,6 +290,9 @@ test('the slicer presents one 3D control and two independently zoomable density 
     'utf8'
   );
   const sharedCss = fs.readFileSync(path.join(projectRoot, 'styles.css'), 'utf8');
+  const rangeInputHandler = slicerSource.match(
+    /this\.onRangeInput = \(\) => \{[\s\S]*?\n    \};/
+  )?.[0] || '';
 
   assert.match(slicerSource, /plotPanelMarkup\("joint"/);
   assert.match(slicerSource, /plotPanelMarkup\("conditional"/);
@@ -298,12 +303,29 @@ test('the slicer presents one 3D control and two independently zoomable density 
   assert.match(slicerSource, /this\.showParameterLegend \? this\.parameterLegendMarkup\(\) : ""/);
   assert.match(slicerSource, /𝔼\[X\]/);
   assert.match(slicerSource, /𝔼\[Y\]/);
-  assert.match(slicerSource, /Joint Density/);
+  assert.match(slicerSource, /Slice at X:/);
+  assert.match(slicerSource, /Slice at Y:/);
+  assert.match(
+    slicerSource,
+    /Joint Density <span class="bns-math">f<sub>X, Y<\/sub>\(x, y\)<\/span> Evaluated at/
+  );
   assert.match(slicerSource, /Conditional Density/);
+  assert.match(componentCss, /\.bns-range-label\s*\{[\s\S]*?justify-content:\s*flex-end/);
   assert.doesNotMatch(slicerSource, /data-zoom-kind|data-zoom-direction|Reset 3D view|bns-reset|bns-normalize|Raycaster|sliceHandle/);
   assert.match(slicerSource, /new Float32Array\(pointCount \* 4\)/);
   assert.match(slicerSource, /setAttribute\("color", new THREE\.BufferAttribute\(colors, 4\)\)/);
   assert.match(slicerSource, /colors\[4 \* pointIndex \+ 3\] = 0\.5145 \* Math\.sqrt\(proportion\)/);
+  assert.match(slicerSource, /const SURFACE_DOMAIN_SCALE = 1\.2/);
+  assert.match(slicerSource, /const SURFACE_SAMPLE_COUNT = 73/);
+  assert.match(slicerSource, /const SLICE_CURVE_SAMPLE_COUNT = 193/);
+  assert.match(slicerSource, /this\.surfaceXDomain = expandedDomain\(this\.xDomain, SURFACE_DOMAIN_SCALE\)/);
+  assert.match(slicerSource, /this\.surfaceYDomain = expandedDomain\(this\.yDomain, SURFACE_DOMAIN_SCALE\)/);
+  assert.match(slicerSource, /range\([\s\S]*?this\.surfaceXDomain\[0\][\s\S]*?this\.surfaceXDomain\[1\][\s\S]*?SURFACE_SAMPLE_COUNT/);
+  assert.match(slicerSource, /range\([\s\S]*?this\.surfaceYDomain\[0\][\s\S]*?this\.surfaceYDomain\[1\][\s\S]*?SURFACE_SAMPLE_COUNT/);
+  assert.match(slicerSource, /this\.surfaceYDomain\[0\][\s\S]*?this\.surfaceYDomain\[1\][\s\S]*?SLICE_CURVE_SAMPLE_COUNT/);
+  assert.match(slicerSource, /this\.surfaceXDomain\[0\][\s\S]*?this\.surfaceXDomain\[1\][\s\S]*?SLICE_CURVE_SAMPLE_COUNT/);
+  assert.match(slicerSource, /xLabel\.position\.set\(this\.worldX\(this\.surfaceXDomain\[1\]\)/);
+  assert.match(slicerSource, /yLabel\.position\.set\(0, 0\.12, this\.worldY\(this\.surfaceYDomain\[1\]\)/);
   assert.match(slicerSource, /this\.gridXDomain = expandedDomain\(this\.xDomain, 2\)/);
   assert.match(slicerSource, /this\.gridXDomain\[1\], 33/);
   assert.match(slicerSource, /gridHeight,[\s\S]*?0\.486/);
@@ -321,9 +343,17 @@ test('the slicer presents one 3D control and two independently zoomable density 
   assert.match(slicerSource, /root\.dataset\.sharedSidePlotScale === "true"/);
   assert.match(slicerSource, /this\.sharedSideDomain = \[/);
   assert.match(slicerSource, /expandedDomain\(this\.sharedSideDomain, 1 \/ this\.state\.zoom\[kind\]\)/);
-  assert.match(slicerSource, /this\.model\.marginalDensityX\(fixedValue\) \* conditionalPeakDensity/);
-  assert.match(slicerSource, /this\.model\.marginalDensityY\(fixedValue\) \* conditionalPeakDensity/);
-  assert.match(slicerSource, /this\.shareSidePlotScale \? jointSlicePeakDensity : this\.model\.peakDensity/);
+  assert.match(
+    slicerSource,
+    /setMode\(mode,[\s\S]*?const value = clamp\(this\.state\.values\[this\.state\.mode\][\s\S]*?this\.rangeInput\.value = String\(value\)/
+  );
+  assert.match(
+    slicerSource,
+    /const baseYMaximum = 1\.08 \* \(kind === "joint"[\s\S]*?this\.model\.peakDensity/
+  );
+  assert.doesNotMatch(slicerSource, /jointSlicePeakDensity/);
+  assert.match(rangeInputHandler, /scheduleSliceUpdate/);
+  assert.doesNotMatch(slicerSource, /sharedJointSlicePeakDensity/);
   assert.match(slicerSource, /numberFromData\(root, "initialJointYMaximum", NaN\)/);
   assert.match(slicerSource, /"initialJointZoom"/);
   assert.match(slicerSource, /automaticJointYMaximum \/ requestedJointYMaximum/);

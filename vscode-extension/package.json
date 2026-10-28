@@ -1,8 +1,8 @@
 {
   "name": "course-notes-preview",
   "displayName": "Course Notes Preview",
-  "description": "A live, side-by-side preview for math-heavy Markdown course notes.",
-  "version": "0.8.1",
+  "description": "A live, side-by-side preview for math-heavy Markdown course notes with project-wide equation and callout references.",
+  "version": "0.8.3",
   "publisher": "local-notes",
   "license": "MIT",
   "engines": {
@@ -70,7 +70,7 @@
           "items": {
             "type": "string"
           },
-          "description": "Markdown files in section order, relative to the workspace root. This controls section numbering and cross-file equation references."
+          "description": "Markdown files in section order, relative to the workspace root. This controls section numbering and cross-file equation and callout references."
         },
         "courseNotesPreview.workspaceCssFiles": {
           "type": "array",
@@ -85,7 +85,7 @@
         "courseNotesPreview.autoNumberCallouts": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically number result boxes and labeled equations by section, and fill in numbered cross-references."
+          "description": "Automatically number supported callout environments and labeled equations by section, and fill in numbered cross-references."
         },
         "courseNotesPreview.openCollapsedProofs": {
           "type": "boolean",
@@ -94,7 +94,7 @@
         },
         "courseNotesPreview.updateDelay": {
           "type": "integer",
-          "default": 120,
+          "default": 400,
           "minimum": 25,
           "maximum": 1000,
           "description": "Milliseconds to wait after an edit before refreshing the preview."
@@ -103,9 +103,9 @@
     }
   },
   "scripts": {
-    "check": "node --check media/html-markdown.js && node --check src/extension.js && node --check media/source-navigation.js && node --check media/equation-numbering.js && node --check media/equation-reference-index.js && node --check media/code-blocks.js && node --check media/preview.js && node --check ../figures/joint-visualizations/bivariate-normal-loader.js && node --check ../figures/joint-visualizations/bivariate-normal-math.js && node --check ../figures/joint-visualizations/bivariate-normal-slicer.js && node --check ../figures/joint-visualizations/vendor/three.module.js && node --check ../figures/joint-visualizations/vendor/three.core.js && node --check ../figures/joint-visualizations/vendor/OrbitControls.js && node --test test/*.test.js",
-    "package": "vsce package --out course-notes-preview-0.8.1.vsix",
-    "install:local": "code --install-extension course-notes-preview-0.8.1.vsix --force"
+    "check": "node --check media/html-markdown.js && node --check media/interactive-components.js && node --check src/extension.js && node --check media/source-navigation.js && node --check media/equation-numbering.js && node --check media/equation-reference-index.js && node --check media/callout-reference-index.js && node --check media/project-reference-index.js && node --check media/code-blocks.js && node --check media/preview.js && node --check ../figures/joint-visualizations/bivariate-normal-loader.js && node --check ../figures/joint-visualizations/bivariate-normal-math.js && node --check ../figures/joint-visualizations/bivariate-normal-slicer.js && node --check ../figures/joint-visualizations/vendor/three.module.js && node --check ../figures/joint-visualizations/vendor/three.core.js && node --check ../figures/joint-visualizations/vendor/OrbitControls.js && node --test test/*.test.js",
+    "package": "vsce package --out course-notes-preview-0.8.3.vsix",
+    "install:local": "code --install-extension course-notes-preview-0.8.3.vsix --force"
   },
   "devDependencies": {
     "marked": "18.0.11",

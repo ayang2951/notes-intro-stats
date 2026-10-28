@@ -3,15 +3,15 @@
 const path = require('path');
 const vscode = require('vscode');
 const {
-  buildEquationReferenceIndex,
-  equationReferenceRecords
-} = require('../media/equation-reference-index');
+  buildProjectReferenceIndex: createProjectReferenceIndex,
+  projectReferenceRecords
+} = require('../media/project-reference-index');
 const { resolveSourceMatch } = require('../media/source-navigation');
 const { scheduleMathErrorRetry } = require('./render-retry');
 
 const CONFIG_SECTION = 'courseNotesPreview';
 const VIEW_TYPE = 'courseNotesPreview.preview';
-const DEFAULT_UPDATE_DELAY = 120;
+const DEFAULT_UPDATE_DELAY = 400;
 const MATH_ERROR_RETRY_DELAY = 300;
 const MAX_SELECTED_TEXT_LENGTH = 256;
 const MAX_CODE_COPY_LENGTH = 5_000_000;
@@ -240,7 +240,7 @@ class PreviewController {
     const configuration = this.configuration();
     const [cssText, referenceIndex] = await Promise.all([
       this.readWorkspaceCss(configuration),
-      this.buildProjectEquationIndex(configuration, document)
+      this.buildProjectReferenceIndex(configuration, document)
     ]);
     if (this.disposed || generation !== this.renderGeneration) return;
 
@@ -254,7 +254,7 @@ class PreviewController {
       sectionNumber: this.sectionNumber(document, configuration),
       autoNumberCallouts: configuration.get('autoNumberCallouts', true),
       openCollapsedProofs: configuration.get('openCollapsedProofs', false),
-      projectReferences: equationReferenceRecords(referenceIndex)
+      projectReferences: projectReferenceRecords(referenceIndex)
     };
 
     this.panel.title = previewTitle(document);
@@ -368,7 +368,7 @@ class PreviewController {
 
     let sourceDocument = await this.sourceDocument();
     if (requestedRevision !== this.renderGeneration) return;
-    let index = await this.buildProjectEquationIndex(this.configuration(), sourceDocument);
+    let index = await this.buildProjectReferenceIndex(this.configuration(), sourceDocument);
     if (requestedRevision !== this.renderGeneration) return;
     let targets = index.get(message.id) || [];
     if (targets.length !== 1) {
@@ -385,7 +385,7 @@ class PreviewController {
     // the index once more so a just-saved edit cannot leave a shifted range.
     sourceDocument = await this.sourceDocument();
     if (requestedRevision !== this.renderGeneration) return;
-    index = await this.buildProjectEquationIndex(this.configuration(), sourceDocument);
+    index = await this.buildProjectReferenceIndex(this.configuration(), sourceDocument);
     if (requestedRevision !== this.renderGeneration) return;
     targets = index.get(message.id) || [];
     if (targets.length !== 1 || targets[0].uri !== document.uri.toString()) {
@@ -411,13 +411,16 @@ class PreviewController {
     };
 
     editor.selection = new vscode.Selection(range.start, range.end);
-    const equationLine = clampLine(document, target.equationLine);
-    const equationPosition = new vscode.Position(
-      equationLine,
-      document.lineAt(equationLine).firstNonWhitespaceCharacterIndex
+    const targetLine = clampLine(
+      document,
+      target.targetLine ?? target.equationLine ?? target.line
+    );
+    const targetPosition = new vscode.Position(
+      targetLine,
+      document.lineAt(targetLine).firstNonWhitespaceCharacterIndex
     );
     editor.revealRange(
-      new vscode.Range(equationPosition, equationPosition),
+      new vscode.Range(targetPosition, targetPosition),
       vscode.TextEditorRevealType.InCenterIfOutsideViewport
     );
   }
@@ -558,9 +561,11 @@ class PreviewController {
     return documents.filter(Boolean);
   }
 
-  async buildProjectEquationIndex(configuration, sourceDocument) {
+  async buildProjectReferenceIndex(configuration, sourceDocument) {
     const documents = await this.projectDocuments(configuration, sourceDocument);
-    return buildEquationReferenceIndex(documents);
+    return createProjectReferenceIndex(documents, {
+      includeCallouts: configuration.get('autoNumberCallouts', true)
+    });
   }
 
   configuredStylesheetUris() {
@@ -631,6 +636,9 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   );
   const htmlMarkdownScriptUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'html-markdown.js')
+  );
+  const interactiveComponentsScriptUri = webview.asWebviewUri(
+    vscode.Uri.joinPath(extensionUri, 'media', 'interactive-components.js')
   );
   const previewScriptUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, 'media', 'preview.js')
@@ -703,6 +711,7 @@ function createWebviewHtml(webview, extensionUri, workspaceFolder) {
   <script nonce="${nonce}" defer src="${equationNumberingScriptUri}"></script>
   <script nonce="${nonce}" defer src="${codeBlocksScriptUri}"></script>
   <script nonce="${nonce}" defer src="${htmlMarkdownScriptUri}"></script>
+  <script nonce="${nonce}" defer src="${interactiveComponentsScriptUri}"></script>
   ${bivariateNormalLoaderScriptTag}
   <script nonce="${nonce}" defer src="${previewScriptUri}"></script>
 </head>

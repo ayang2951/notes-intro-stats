@@ -54,23 +54,29 @@ test('page order and explicit section numbers are independent', () => {
   const { api } = harness();
   const notes = JSON.parse(JSON.stringify(api.ORDERED_NOTES));
 
-  assert.deepEqual(notes.map(note => note.file), ['week4.md', 'week3.md', 'week2.md', 'week1.md']);
-  assert.deepEqual(notes.map(note => note.sectionNumber), [4, 3, 2, 1]);
+  assert.deepEqual(notes.map(note => note.file), [
+    'week5.md',
+    'week4.md',
+    'week3.md',
+    'week2.md',
+    'week1.md'
+  ]);
+  assert.deepEqual(notes.map(note => note.sectionNumber), [5, 4, 3, 2, 1]);
   assert.doesNotThrow(() => api.validateNoteSections(notes));
   assert.throws(
     () => api.validateNoteSections([{ file: 'a.md', sectionNumber: 1 }, { file: 'b.md', sectionNumber: 1 }]),
     /assigned more than once/
   );
 
-  const weekThree = api.sectionMarkup(notes[1], 1, '<p>Three.</p>');
+  const weekThree = api.sectionMarkup(notes[2], 2, '<p>Three.</p>');
   assert.match(weekThree, /id="sec-3"/);
   assert.match(weekThree, /data-sec="3"/);
-  assert.match(weekThree, /data-auto-id-section="2"/);
+  assert.match(weekThree, /data-auto-id-section="3"/);
 
-  const weekOne = api.sectionMarkup(notes[3], 3, '<p>One.</p>');
+  const weekOne = api.sectionMarkup(notes[4], 4, '<p>One.</p>');
   assert.match(weekOne, /id="sec-1"/);
   assert.match(weekOne, /data-sec="1"/);
-  assert.match(weekOne, /data-auto-id-section="4"/);
+  assert.match(weekOne, /data-auto-id-section="5"/);
 });
 
 test('page and table of contents stay descending while bookmarks sort by section number', () => {
@@ -152,6 +158,12 @@ test('workspace preview files are listed in section-number order', () => {
   const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
   const noteFiles = settings['courseNotesPreview.noteFiles'];
 
-  assert.deepEqual(noteFiles, ['notes/week1.md', 'notes/week2.md', 'notes/week3.md', 'notes/week4.md']);
+  assert.deepEqual(noteFiles, [
+    'notes/week1.md',
+    'notes/week2.md',
+    'notes/week3.md',
+    'notes/week4.md',
+    'notes/week5.md'
+  ]);
   noteFiles.forEach(noteFile => assert.equal(fs.existsSync(path.join(project, noteFile)), true));
 });

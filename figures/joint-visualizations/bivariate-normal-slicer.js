@@ -7,6 +7,9 @@ const SELECTOR = ".bivariate-normal-slicer";
 const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 const MIN_PLOT_ZOOM = 0.5;
 const MAX_PLOT_ZOOM = 4;
+const SURFACE_DOMAIN_SCALE = 1.2;
+const SURFACE_SAMPLE_COUNT = 73;
+const SLICE_CURVE_SAMPLE_COUNT = 193;
 const instances = new Map();
 const savedStates = new Map();
 let instanceCounter = 0;
@@ -95,6 +98,8 @@ class BivariateNormalSlicer {
       this.model.meanY - 3 * this.model.standardDeviationY,
       this.model.meanY + 3 * this.model.standardDeviationY
     ];
+    this.surfaceXDomain = expandedDomain(this.xDomain, SURFACE_DOMAIN_SCALE);
+    this.surfaceYDomain = expandedDomain(this.yDomain, SURFACE_DOMAIN_SCALE);
     this.displayCenterX = finiteStateValue(this.model.displayCenterX, this.model.meanX);
     this.displayCenterY = finiteStateValue(this.model.displayCenterY, this.model.meanY);
     this.gridXDomain = expandedDomain(this.xDomain, 2);
@@ -176,7 +181,7 @@ class BivariateNormalSlicer {
               <button type="button" data-mode="y" aria-pressed="false">Fix Y</button>
             </div>
             <label class="bns-range-label" for="${this.domId}-range">
-              <span data-range-name>Slice at X</span>
+              <span data-range-name>Slice at X:</span>
               <output for="${this.domId}-range" data-range-output>0.00</output>
             </label>
             <input class="bns-range" id="${this.domId}-range" type="range" step="0.05" value="0" />
@@ -325,8 +330,16 @@ class BivariateNormalSlicer {
   }
 
   createSurface() {
-    const xValues = range(this.xDomain[0], this.xDomain[1], 61);
-    const yValues = range(this.yDomain[0], this.yDomain[1], 61);
+    const xValues = range(
+      this.surfaceXDomain[0],
+      this.surfaceXDomain[1],
+      SURFACE_SAMPLE_COUNT
+    );
+    const yValues = range(
+      this.surfaceYDomain[0],
+      this.surfaceYDomain[1],
+      SURFACE_SAMPLE_COUNT
+    );
     const pointCount = xValues.length * yValues.length;
     const positions = new Float32Array(pointCount * 3);
     const colors = new Float32Array(pointCount * 4);
@@ -546,9 +559,9 @@ class BivariateNormalSlicer {
     });
     this.labelGroup.clear();
     const xLabel = this.createTextSprite("x");
-    xLabel.position.set(this.worldX(this.xDomain[1]) + 0.45, 0.12, 0);
+    xLabel.position.set(this.worldX(this.surfaceXDomain[1]) + 0.45, 0.12, 0);
     const yLabel = this.createTextSprite("y");
-    yLabel.position.set(0, 0.12, this.worldY(this.yDomain[1]) + 0.35);
+    yLabel.position.set(0, 0.12, this.worldY(this.surfaceYDomain[1]) + 0.35);
     this.labelGroup.add(xLabel, yLabel);
   }
 
@@ -590,7 +603,7 @@ class BivariateNormalSlicer {
     this.rangeInput.min = String(domain[0]);
     this.rangeInput.max = String(domain[1]);
     this.rangeInput.value = String(value);
-    this.rangeName.textContent = this.state.mode === "x" ? "Slice at X" : "Slice at Y";
+    this.rangeName.textContent = this.state.mode === "x" ? "Slice at X:" : "Slice at Y:";
     this.rangeOutput.value = formatNumber(value);
     this.updateSlice();
     if (announce) this.announceSelection();
@@ -618,7 +631,11 @@ class BivariateNormalSlicer {
       if (mode === "x") {
         const worldValue = this.worldX(value);
         this.slicePlaneX.position.x = worldValue;
-        curvePoints = range(this.yDomain[0], this.yDomain[1], 161).map((y) =>
+        curvePoints = range(
+          this.surfaceYDomain[0],
+          this.surfaceYDomain[1],
+          SLICE_CURVE_SAMPLE_COUNT
+        ).map((y) =>
           new THREE.Vector3(
             worldValue,
             this.worldDensity(this.model.jointDensity(value, y)),
@@ -627,7 +644,11 @@ class BivariateNormalSlicer {
       } else {
         const worldValue = this.worldY(value);
         this.slicePlaneY.position.z = worldValue;
-        curvePoints = range(this.xDomain[0], this.xDomain[1], 161).map((x) =>
+        curvePoints = range(
+          this.surfaceXDomain[0],
+          this.surfaceXDomain[1],
+          SLICE_CURVE_SAMPLE_COUNT
+        ).map((x) =>
           new THREE.Vector3(
             this.worldX(x),
             this.worldDensity(this.model.jointDensity(x, value)),
@@ -689,18 +710,15 @@ class BivariateNormalSlicer {
     const conditionalPeakDensity = mode === "x"
       ? this.model.conditionalPeakDensityY(fixedValue)
       : this.model.conditionalPeakDensityX(fixedValue);
-    const jointSlicePeakDensity = mode === "x"
-      ? this.model.marginalDensityX(fixedValue) * conditionalPeakDensity
-      : this.model.marginalDensityY(fixedValue) * conditionalPeakDensity;
     const baseYMaximum = 1.08 * (kind === "joint"
-      ? this.shareSidePlotScale ? jointSlicePeakDensity : this.model.peakDensity
+      ? this.model.peakDensity
       : conditionalPeakDensity);
     const yMaximum = baseYMaximum / this.state.zoom[kind];
     const xScale = (value) => margin.left +
       (value - domain[0]) / (domain[1] - domain[0]) * plotWidth;
     const yScale = (value) => margin.top + plotHeight - value / yMaximum * plotHeight;
     const accessibleTitle = kind === "joint"
-      ? `Joint Density f X comma Y of x comma y at ${fixedVariable} equals ${formatNumber(fixedValue)}`
+      ? `Joint Density f X comma Y of x comma y Evaluated at ${fixedVariable} equals ${formatNumber(fixedValue)}`
       : `Conditional Density f of ${varyingVariable} given ${fixedVariable} equals ${formatNumber(fixedValue)}`;
 
     const clipId = `${this.domId}-${kind}-clip`;
@@ -795,7 +813,7 @@ class BivariateNormalSlicer {
     }, "density"));
 
     plot.title.innerHTML = kind === "joint"
-      ? `Joint Density <span class="bns-math">f<sub>X, Y</sub>(x, y)</span> at <i>${fixedVariable}</i> = ${formatNumber(fixedValue)}`
+      ? `Joint Density <span class="bns-math">f<sub>X, Y</sub>(x, y)</span> Evaluated at <i>${fixedVariable}</i> = ${formatNumber(fixedValue)}`
       : `Conditional Density <span class="bns-math">f(${varyingVariable} | ${fixedVariable} = ${formatNumber(fixedValue)})</span>`;
   }
 
